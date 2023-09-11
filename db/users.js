@@ -1,7 +1,7 @@
 import { client } from "./index";
 import * as bcrypt from "bcrypt";
 
-async function createUser({ username, password, email, isAdmin = false }) {
+async function createUser({ firstName, lastName, password, email, isAdmin = false }) {
   const SALT_COUNT = 10;
   const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
 
@@ -10,13 +10,13 @@ async function createUser({ username, password, email, isAdmin = false }) {
       rows: [user],
     } = await client.query(
       `
-            INSERT INTO users (username, password, email, is_admin)
-            VALUES ($1, $2, $3, $4)
+            INSERT INTO users (first_name, last_name, password, email, is_admin)
+            VALUES ($1, $2, $3, $4, $5)
             ON CONFLICT (username) DO NOTHING
             RETURNING *;
         
         `,
-      [username, hashedPassword, email, isAdmin]
+      [firstName, lastName, hashedPassword, email, isAdmin]
     );
 
     return user;
