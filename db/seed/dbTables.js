@@ -86,7 +86,6 @@ async function createTables() {
     await client.query(`
             CREATE TABLE ingredient_category (
                 id SERIAL PRIMARY KEY,
-                title varchar(255) UNIQUE NOT NULL,
                 ingredient_id INTEGER REFERENCES ingredients(id),
                 category_id INTEGER REFERENCES category(id)
 
