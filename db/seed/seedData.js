@@ -80,3 +80,128 @@ async function createInitialOrders() {
     throw error;
   }
 }
+
+async function createInitialIngredients() {
+  console.log("Starting to create ingredients...");
+  try {
+    const ingredientsToCreate = [
+      {
+        title: "Black Olives",
+        image_name: "black_olives.jpg",
+      },
+      {
+        title: "Canadian Bacon",
+        image_name: "canadian_bacon.jpg",
+      },
+      {
+        title: "Green Olives",
+        image_name: "green_olives.jpg",
+      },
+      {
+        title: "Green Peppers",
+        image_name: "green_peppers.jpg",
+      },
+      {
+        title: "Ground Beef",
+        image_name: "ground_beef.webp",
+      },
+      {
+        title: "Hand-Tossed Crust",
+        image_name: "hand_tossed_crust.png",
+      },
+      {
+        title: "Italian Sausage",
+        image_name: "italian_sausage.jpg",
+      },
+      {
+        title: "Mushrooms",
+        image_name: "mushrooms.webp",
+      },
+      {
+        title: "Pepperoni",
+        image_name: "pepperoni.jpg",
+      },
+      {
+        title: "Pineapple",
+        image_name: "pineapple.jpg",
+      },
+      {
+        title: "Red Onions",
+        image_name: "red_onions.jpg",
+      },
+      {
+        title: "Stuffed Crust",
+        image_name: "stuffed_crust.jpeg",
+      },
+      {
+        title: "Thin Crust",
+        image_name: "thin_crust.jpg",
+      },
+    ];
+
+    await Promise.all(ingredientsToCreate.map(createIngredient));
+    console.log("Finished creating ingredients!");
+  } catch (error) {
+    console.error("Error creating ingredients: ", error);
+    throw error;
+  }
+}
+
+async function createInitialPizzaOrders() {
+  console.log("Starting to create Pizza Orders...");
+  try {
+    const pizzaOrdersToCreate = [
+      {
+        ingredient_id: 2,
+        order_id: 1,
+        pizza_price: 12.65,
+        quantity: 1,
+        size: "Medium",
+      },
+      {
+        ingredient_id: 5,
+        order_id: 2,
+        pizza_price: 13.32,
+        size: "Large",
+      },
+    ];
+
+    await Promise.all(pizzaOrdersToCreate.map(attachIngredientToPizza));
+    console.log("Finished creating pizza orders!");
+  } catch (error) {
+    console.error("Error creating pizza orders: ", error);
+    throw error;
+  }
+}
+
+async function createInitialCategories() {
+  console.log("Starting to create categories...");
+  try {
+    const categoriesToCreate = [
+      {
+        title: "Toppings",
+      },
+      {
+        title: "Crust",
+      },
+    ];
+  } catch (error) {
+    console.error("Error creating categories: ", error);
+    throw error;
+  }
+}
+
+async function populateDB() {
+  try {
+    await createInitialUsers();
+    await createInitialOrders();
+    await createInitialIngredients();
+    await createInitialPizzaOrders();
+    await createInitialCategories();
+  } catch (error) {
+    console.log("Error during populateDB: ", error);
+    throw error;
+  }
+}
+
+export { populateDB };
