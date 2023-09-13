@@ -1,4 +1,5 @@
-import { client } from "./index";
+// import { client } from "./index";
+const { client } = require("./index")
 
 async function createIngredient({ title, imageName }) {
   try {
@@ -239,7 +240,21 @@ async function deleteIngredient(id) {
   }
 }
 
-export {
+// export {
+//   createIngredient,
+//   updateIngredient,
+//   getAllIngredients,
+//   getIngredientById,
+//   getIngredientByTitle,
+//   getIngredientsByCategory,
+//   attachIngredientToPizza,
+//   removeIngredientFromPizza,
+//   attachIngredientToCategory,
+//   removeIngredientFromCategory,
+//   deleteIngredient,
+// };
+
+module.exports = {
   createIngredient,
   updateIngredient,
   getAllIngredients,

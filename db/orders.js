@@ -1,4 +1,5 @@
-import { client } from "./index";
+// import { client } from "./index";
+const { client } = require("./index");
 
 async function createOrder({ userId, orderTotal }) {
   try {
@@ -63,13 +64,16 @@ async function getOrderByOrderId(orderId) {
 async function getOrderByUserId(userId) {
   try {
     const {
-        rows: [order],
-    } = await client.query(`
+      rows: [order],
+    } = await client.query(
+      `
     SELECT *
     FROM orders
     WHERE user_id=$1
     
-    `, [userId]);
+    `,
+      [userId]
+    );
 
     return order;
   } catch (error) {
@@ -79,25 +83,35 @@ async function getOrderByUserId(userId) {
 }
 
 async function deleteOrder(orderId) {
-    try {
-        
-        await client.query(`
+  try {
+    await client.query(
+      `
         DELETE FROM pizza_order
         WHERE order_id=$1
         
-        `, [orderId]);
+        `,
+      [orderId]
+    );
 
-        await client.query(
-            `
+    await client.query(
+      `
             DELETE FROM orders
             WHERE id=$1
             `,
-            [orderId]
-        )
-    } catch (error) {
-        console.error("Error deleting order: ", error);
-        throw error;
-    }
+      [orderId]
+    );
+  } catch (error) {
+    console.error("Error deleting order: ", error);
+    throw error;
+  }
 }
 
-export { createOrder, getOrderByOrderId, getAllOpenOrders, getOrderByUserId, deleteOrder };
+// export { createOrder, getOrderByOrderId, getAllOpenOrders, getOrderByUserId, deleteOrder };
+
+module.exports = {
+  createOrder,
+  getOrderByOrderId,
+  getAllOpenOrders,
+  getOrderByUserId,
+  deleteOrder,
+};

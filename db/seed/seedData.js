@@ -1,11 +1,15 @@
-import { createUser } from "../users";
-import { createOrder } from "../orders";
-import {
-  createIngredient,
-  attachIngredientToPizza,
-  attachIngredientToCategory,
-} from "../ingredients";
-import { createCategory } from "../categories";
+// import { createUser } from "../users";
+const { createUser } = require("../users")
+// import { createOrder } from "../orders";
+const { createOrder } = require("../orders")
+// import {
+//   createIngredient,
+//   attachIngredientToPizza,
+//   attachIngredientToCategory,
+// } from "../ingredients";
+const { createIngredient, attachIngredientToPizza, attachIngredientToCategory } = require("../ingredients")
+// import { createCategory } from "../categories";
+const { createCategory } = require("../categories")
 
 async function createInitialUsers() {
   console.log("Starting to create users...");
@@ -204,4 +208,6 @@ async function populateDB() {
   }
 }
 
-export { populateDB };
+// export { populateDB };
+
+module.exports = { populateDB }

@@ -1,4 +1,5 @@
-import { client } from "./index";
+// import { client } from "./index";
+const { client } = require("./index")
 
 async function createCategory(title) {
   try {
@@ -142,7 +143,17 @@ async function deleteCategory(id) {
   }
 }
 
-export {
+// export {
+//   createCategory,
+//   updateCategory,
+//   getAllCategories,
+//   getCategoryById,
+//   getCategoryByTitle,
+//   getCategoryByIngredient,
+//   deleteCategory,
+// };
+
+module.exports = {
   createCategory,
   updateCategory,
   getAllCategories,

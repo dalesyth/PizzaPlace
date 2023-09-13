@@ -1,5 +1,7 @@
-import { client } from "./index";
-import * as bcrypt from "bcrypt";
+// import { client } from "./index";
+// import * as bcrypt from "bcrypt";
+const { client } = require("./index");
+const { bcrypt } = require('bcrypt')
 
 async function createUser({ firstName, lastName, password, email, isAdmin = false }) {
   const SALT_COUNT = 10;
@@ -123,7 +125,15 @@ async function deleteUser(userId) {
   }
 }
 
-export {
+// export {
+//   createUser,
+//   getAllUsers,
+//   getUserByUsername,
+//   getUserByUserId,
+//   deleteUser,
+// };
+
+module.exports = {
   createUser,
   getAllUsers,
   getUserByUsername,

@@ -1,4 +1,5 @@
-import { client } from "../index";
+// import { client } from "../index";
+const { client } = require("../index")
 
 async function dropTables() {
   try {
@@ -101,4 +102,5 @@ async function createTables() {
   }
 }
 
-export { dropTables, createTables };
+// export { dropTables, createTables };
+module.exports = { dropTables, createTables }
