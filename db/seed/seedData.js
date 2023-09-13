@@ -1,15 +1,11 @@
-// import { createUser } from "../users";
-const { createUser } = require("../users")
-// import { createOrder } from "../orders";
-const { createOrder } = require("../orders")
-// import {
-//   createIngredient,
-//   attachIngredientToPizza,
-//   attachIngredientToCategory,
-// } from "../ingredients";
-const { createIngredient, attachIngredientToPizza, attachIngredientToCategory } = require("../ingredients")
-// import { createCategory } from "../categories";
-const { createCategory } = require("../categories")
+const { createUser } = require("../users");
+const { createOrder } = require("../orders");
+const {
+  createIngredient,
+  attachIngredientToPizza,
+  attachIngredientToCategory,
+} = require("../ingredients");
+const { createCategory } = require("../categories");
 
 async function createInitialUsers() {
   console.log("Starting to create users...");
@@ -189,6 +185,9 @@ async function createInitialCategories() {
         title: "Crust",
       },
     ];
+
+    await Promise.all(categoriesToCreate.map(createCategory));
+    console.log("Finished creating categories!");
   } catch (error) {
     console.error("Error creating categories: ", error);
     throw error;
@@ -208,6 +207,6 @@ async function populateDB() {
   }
 }
 
-// export { populateDB };
 
-module.exports = { populateDB }
+
+module.exports = { populateDB };

@@ -1,7 +1,6 @@
-// import { client } from "./index";
 const { client } = require("./index")
 
-async function createIngredient({ title, imageName }) {
+async function createIngredient({ title, image_name }) {
   try {
     const {
       rows: [ingredient],
@@ -11,7 +10,7 @@ async function createIngredient({ title, imageName }) {
             VALUES ($1, $2)
             RETURNING *;
             `,
-      [title, imageName]
+      [title, image_name]
     );
 
     return ingredient;
@@ -240,19 +239,7 @@ async function deleteIngredient(id) {
   }
 }
 
-// export {
-//   createIngredient,
-//   updateIngredient,
-//   getAllIngredients,
-//   getIngredientById,
-//   getIngredientByTitle,
-//   getIngredientsByCategory,
-//   attachIngredientToPizza,
-//   removeIngredientFromPizza,
-//   attachIngredientToCategory,
-//   removeIngredientFromCategory,
-//   deleteIngredient,
-// };
+
 
 module.exports = {
   createIngredient,

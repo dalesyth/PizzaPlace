@@ -1,4 +1,3 @@
-// import { client } from "../index";
 const { client } = require("../index")
 
 async function dropTables() {
@@ -7,7 +6,7 @@ async function dropTables() {
 
     await client.query(`
         DROP TABLE IF EXISTS ingredient_category;
-        DROP TABLE IF EXISTS category;
+        DROP TABLE IF EXISTS categories;
         DROP TABLE IF EXISTS pizza_order;
         DROP TABLE IF EXISTS ingredients;
         DROP TABLE IF EXISTS orders;
@@ -89,7 +88,7 @@ async function createTables() {
             CREATE TABLE ingredient_category (
                 id SERIAL PRIMARY KEY,
                 ingredient_id INTEGER REFERENCES ingredients(id),
-                category_id INTEGER REFERENCES category(id)
+                category_id INTEGER REFERENCES categories(id)
 
             );
         
@@ -102,5 +101,5 @@ async function createTables() {
   }
 }
 
-// export { dropTables, createTables };
+
 module.exports = { dropTables, createTables }

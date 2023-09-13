@@ -1,5 +1,3 @@
-// import { dropTables, createTables } from "./dbtables";
-// import { populateDB } from "./seedData";
 const { dropTables, createTables } = require("./dbTables")
 const { populateDB } = require("./seedData")
 
@@ -14,5 +12,5 @@ async function rebuildDB() {
   }
 }
 
-// export { rebuildDB };
+
 module.exports = { rebuildDB }

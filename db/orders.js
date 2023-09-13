@@ -1,7 +1,6 @@
-// import { client } from "./index";
 const { client } = require("./index");
 
-async function createOrder({ userId, orderTotal }) {
+async function createOrder({ user_id, order_total }) {
   try {
     const {
       rows: [order],
@@ -11,7 +10,7 @@ async function createOrder({ userId, orderTotal }) {
         VALUES ($1, $2)
         RETURNING *;
         `,
-      [userId, orderTotal]
+      [user_id, order_total]
     );
 
     return order;
@@ -106,7 +105,7 @@ async function deleteOrder(orderId) {
   }
 }
 
-// export { createOrder, getOrderByOrderId, getAllOpenOrders, getOrderByUserId, deleteOrder };
+
 
 module.exports = {
   createOrder,
