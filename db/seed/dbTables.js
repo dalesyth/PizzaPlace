@@ -1,14 +1,15 @@
-const { client } = require("../index")
+const { client } = require("../index");
 
 async function dropTables() {
   try {
     console.log("Starting to drop tables...");
 
     await client.query(`
-        DROP TABLE IF EXISTS ingredient_category;
-        DROP TABLE IF EXISTS categories;
-        DROP TABLE IF EXISTS pizza_order;
-        DROP TABLE IF EXISTS ingredients;
+        DROP TABLE IF EXISTS pizza_toppings;
+        DROP TABLE IF EXISTS ordered_pizza;
+        DROP TABLE IF EXISTS crust_options;
+        DROP TABLE IF EXISTS sauce_options;
+        DROP TABLE IF EXISTS topping_options;
         DROP TABLE IF EXISTS orders;
         DROP TABLE IF EXISTS users;
         
@@ -27,12 +28,13 @@ async function createTables() {
 
     await client.query(`
             CREATE TABLE users (
-                id SERIAL PRIMARY KEY,
+                user_id SERIAL PRIMARY KEY,
                 first_name varchar(255) NOT NULL,
                 last_name varchar(255) NOT NULL,
                 password varchar(255) NOT NULL,
                 email varchar(255) UNIQUE NOT NULL,
-                is_admin BOOLEAN DEFAULT FALSE
+                phone varchar(255),
+                role varchar(255) NOT NULL
             );
         
         `);
@@ -41,8 +43,9 @@ async function createTables() {
 
     await client.query(`
             CREATE TABLE orders (
-                id SERIAL PRIMARY KEY,
-                user_id INTEGER REFERENCES users(id),
+                order_id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(user_id),
+                order_date DATE,
                 order_total NUMERIC,
                 order_complete BOOLEAN DEFAULT FALSE
             );
@@ -52,54 +55,65 @@ async function createTables() {
     console.log("Orders table created");
 
     await client.query(`
-            CREATE TABLE ingredients (
-                id SERIAL PRIMARY KEY,
+            CREATE TABLE topping_options (
+                topping_id SERIAL PRIMARY KEY,
                 title varchar(255) UNIQUE NOT NULL,
                 image_name varchar(255)
             );
         `);
 
-    console.log("Ingredients table created");
+    console.log("Toppings table created");
 
     await client.query(`
-            CREATE TABLE pizza_order (
-                id SERIAL PRIMARY KEY,
-                ingredient_id INTEGER REFERENCES ingredients(id),
-                order_id INTEGER REFERENCES orders(id),
+            CREATE TABLE sauce_options (
+                sauce_id SERIAL PRIMARY KEY,
+                title varchar(255) UNIQUE NOT NULL,
+                image_name varchar(255)
+            );
+    `);
+
+    console.log("Sauces table created");
+
+    await client.query(`
+            CREATE TABLE crust_options (
+                crust_id SERIAL PRIMARY KEY,
+                title varchar(255) UNIQUE NOT NULL,
+                image_name varchar(255)
+            );
+    
+    `);
+
+    console.log("Crusts table created");
+
+    await client.query(`
+            CREATE TABLE ordered_pizza (
+                ordered_pizza_id SERIAL PRIMARY KEY,
+                order_id INTEGER REFERENCES orders(order_id),
                 pizza_price NUMERIC,
                 quantity INTEGER,
-                size varchar(255)
+                size varchar(255),
+                crust INTEGER REFERENCES crust_options(crust_id),
+                sauce INTEGER REFERENCES sauce_options(sauce_id),
+                
             );
         `);
 
     console.log("Pizza Order table created");
 
     await client.query(`
-            CREATE TABLE categories (
-                id SERIAL PRIMARY KEY,
-                title varchar(255)
-            );
-        
-        `);
+            CREATE TABLE pizza_toppings (
+                pizza_topping_id SERIAL PRIMARY KEY,
+                topping_id INTEGER REFERENCES topping_options(topping_id),
+                pizza_id INTEGER REFERENCES ordered_pizza(ordered_pizza_id)
 
-    console.log("Categories table created");
+            )
+    `);
 
-    await client.query(`
-            CREATE TABLE ingredient_category (
-                id SERIAL PRIMARY KEY,
-                ingredient_id INTEGER REFERENCES ingredients(id),
-                category_id INTEGER REFERENCES categories(id)
-
-            );
-        
-        `);
-
-    console.log("Ingredient category table created");
+    console.log("Pizza Toppings table created");
   } catch (error) {
     console.error("Error creating tables");
     throw error;
   }
 }
 
-
-module.exports = { dropTables, createTables }
+module.exports = { dropTables, createTables };
