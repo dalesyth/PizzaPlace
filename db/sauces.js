@@ -63,6 +63,22 @@ async function getAllSauces() {
     }
 }
 
+async function getSauceById(id) {
+    try {
+        const {
+            rows: [sauce],
+        } = await client.query(`
+            SELECT * 
+            FROM sauce_options
+            WHERE sauce_id = $1
+        `, [id])
+        return sauce
+    } catch (error) {
+        console.error("Error getting sauce by id: ", error)
+        throw error;
+    }
+}
+
 
 
 
@@ -71,5 +87,6 @@ async function getAllSauces() {
 module.exports = {
     createSauce,
     updateSauce,
-
+    getAllSauces,
+    getSauceById,
 }
