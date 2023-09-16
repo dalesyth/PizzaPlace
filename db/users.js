@@ -81,7 +81,7 @@ async function getUserByEmail(email) {
       `
             SELECT *
             FROM users
-            WHERE username = $1; 
+            WHERE email = $1; 
             
             `,
       [email]
@@ -102,7 +102,8 @@ async function getUserByUserId(userId) {
     } = await client.query(
       `
             SELECT *
-            WHERE id = $1;
+            FROM users
+            WHERE user_id = $1;
             
             `,
       [userId]
@@ -119,7 +120,7 @@ async function deleteUser(userId) {
   try {
     await client.query(
       `
-            DELETE FROM pizza_order
+            DELETE FROM ordered_pizza
             WHERE order_id IN (
                 SELECT id
                 FROM orders
@@ -142,7 +143,7 @@ async function deleteUser(userId) {
     } = await client.query(
       `
             DELETE FROM users
-            WHERE id=$1
+            WHERE user_id=$1
             RETURNING *;
             `,
       [userId]
@@ -160,7 +161,7 @@ module.exports = {
   createUser,
   createAdmin,
   getAllUsers,
-  getUserByUsername,
+  getUserByEmail,
   getUserByUserId,
   deleteUser,
 };
