@@ -1,7 +1,7 @@
 const { client } = require("./index");
 const bcrypt = require('bcrypt')
 
-async function createUser({ first_name, last_name, password, email, isAdmin = false }) {
+async function createUser({ first_name, last_name, password, email, is_admin = false }) {
   const SALT_COUNT = 10;
   const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
 
@@ -16,7 +16,38 @@ async function createUser({ first_name, last_name, password, email, isAdmin = fa
             RETURNING *;
         
         `,
-      [first_name, last_name, hashedPassword, email, isAdmin]
+      [first_name, last_name, hashedPassword, email, is_admin]
+    );
+
+    return user;
+  } catch (error) {
+    console.error("Error creating user: ", error);
+    throw error;
+  }
+}
+
+async function createAdmin({
+  first_name,
+  last_name,
+  password,
+  email,
+  is_admin = true,
+}) {
+  const SALT_COUNT = 10;
+  const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
+
+  try {
+    const {
+      rows: [user],
+    } = await client.query(
+      `
+            INSERT INTO users (first_name, last_name, password, email, is_admin)
+            VALUES ($1, $2, $3, $4, $5)
+            ON CONFLICT (email) DO NOTHING
+            RETURNING *;
+        
+        `,
+      [first_name, last_name, hashedPassword, email, is_admin]
     );
 
     return user;
@@ -29,7 +60,7 @@ async function createUser({ first_name, last_name, password, email, isAdmin = fa
 async function getAllUsers() {
   try {
     const { rows: users } = await client.query(`
-            SELECT id, username, email
+            SELECT user_id, username, email
             FROM users;
         `);
 
@@ -126,6 +157,7 @@ async function deleteUser(userId) {
 
 module.exports = {
   createUser,
+  createAdmin,
   getAllUsers,
   getUserByUsername,
   getUserByUserId,
