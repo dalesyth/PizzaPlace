@@ -105,7 +105,27 @@ async function addSauceToOrderedPizza(sauceId, pizzaId) {
         `, [sauceId, pizzaId])
         return "Sauce attached to ordered pizza successfully"
     } catch (error) {
-        console.error("Error added sauce to ordered pizza: ", error)
+        console.error("Error adding sauce to ordered pizza: ", error)
+        throw error;
+    }
+}
+
+async function deleteSauce(id) {
+    try {
+        await client.query(`
+            DELETE FROM ordered_pizza
+            WHERE sauce = $1
+        
+        `, [id])
+
+        await client.query(`
+            DELETE FROM sauce_options
+            WHERE sauce_id = $1
+        `, [id])
+
+        return "Sauce option successfully removed from db"
+    } catch (error) {
+        console.error("Error deleting sauce option: ", error)
         throw error;
     }
 }
@@ -118,4 +138,5 @@ module.exports = {
     getSauceById,
     getSauceByTitle,
     addSauceToOrderedPizza,
+    deleteSauce,
 }
