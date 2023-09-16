@@ -65,40 +65,40 @@ async function getAllToppings() {
   }
 }
 
-async function getIngredientById(id) {
+async function getToppingById(id) {
   try {
     const {
-      rows: [ingredient],
+      rows: [topping],
     } = await client.query(
       `
             SELECT * 
-            FROM ingredients
-            WHERE id = $1
+            FROM topping_options
+            WHERE topping_id = $1
             
             `,
       [id]
     );
 
-    return ingredient;
+    return topping;
   } catch (error) {
-    console.error("Error getting ingredient by ID: ", error);
+    console.error("Error getting topping by ID: ", error);
     throw error;
   }
 }
 
-async function getIngredientByTitle(title) {
+async function getToppingByTitle(title) {
   try {
     const {
-      rows: [ingredient],
+      rows: [topping],
     } = await client.query(
       `
             SELECT *
-            FROM ingredients
+            FROM topping_options
             WHERE title = $1
             `,
       [title]
     );
-    return ingredient;
+    return topping;
   } catch (error) {
     console.error("Error getting ingredient by title: ", error);
     throw error;
