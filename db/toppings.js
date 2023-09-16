@@ -105,21 +105,22 @@ async function getToppingByTitle(title) {
   }
 }
 
-async function getIngredientsByCategory(categoryId) {
+async function getIngredientsByOrderedPizza(ordered_pizza_id) {
   try {
     const { rows } = await client.query(
       `
-            SELECT ingredients.*
-            FROM ingredients
-            JOIN ingredient_category ON ingredient_category.ingredient_id = ingredients.id
-            WHERE ingredient_category.category_id = $1
+            SELECT topping_options.*
+            FROM topping_options
+            JOIN pizza_toppings ON pizza_toppings.topping_id = topping_options.topping_id
+            JOIN ordered_pizza ON ordered_pizza.ordered_pizza_id = pizza_toppings.pizza_id
+            WHERE ordered_pizza.ordered_pizza_id = $1
             `,
-      [categoryId]
+      [ordered_pizza_id]
     );
 
     return rows;
   } catch (error) {
-    console.error("Error getting ingredient by category: ", error);
+    console.error("Error getting topping by ordered pizza: ", error);
     throw error;
   }
 }
