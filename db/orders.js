@@ -85,7 +85,7 @@ async function deleteOrder(orderId) {
   try {
     await client.query(
       `
-        DELETE FROM pizza_order
+        DELETE FROM ordered_pizza
         WHERE order_id=$1
         
         `,
@@ -95,7 +95,7 @@ async function deleteOrder(orderId) {
     await client.query(
       `
             DELETE FROM orders
-            WHERE id=$1
+            WHERE order_id=$1
             `,
       [orderId]
     );
