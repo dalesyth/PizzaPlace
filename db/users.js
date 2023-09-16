@@ -1,7 +1,13 @@
 const { client } = require("./index");
-const bcrypt = require('bcrypt')
+const bcrypt = require("bcrypt");
 
-async function createUser({ first_name, last_name, password, email, is_admin = false }) {
+async function createUser({
+  first_name,
+  last_name,
+  password,
+  email,
+  is_admin = false,
+}) {
   const SALT_COUNT = 10;
   const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
 
@@ -64,8 +70,7 @@ async function getAllUsers() {
             FROM users;
         `);
 
-
-    users.forEach(user=>delete user.password);
+    users.forEach((user) => delete user.password);
     return users;
   } catch (error) {
     console.error("Error getting all users: ", error);
@@ -155,7 +160,6 @@ async function deleteUser(userId) {
     throw error;
   }
 }
-
 
 module.exports = {
   createUser,

@@ -1,16 +1,16 @@
 const { client } = require("./index");
 
-async function createOrder({ user_id, order_total }) {
+async function createOrder({ user_id, order_date, order_total }) {
   try {
     const {
       rows: [order],
     } = await client.query(
       `
-        INSERT INTO orders (user_id, order_total)
-        VALUES ($1, $2)
+        INSERT INTO orders (user_id, order_date, order_total)
+        VALUES ($1, $2, $3)
         RETURNING *;
         `,
-      [user_id, order_total]
+      [user_id, order_date, order_total]
     );
 
     return order;
@@ -47,7 +47,7 @@ async function getOrderByOrderId(orderId) {
       `
         SELECT *
         FROM orders
-        WHERE id=$1
+        WHERE order_id=$1
         
         `,
       [orderId]
