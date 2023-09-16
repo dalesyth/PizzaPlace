@@ -142,7 +142,6 @@ async function attachToppingToOrderedPizza({ topping_id, pizza_id }) {
   }
 }
 
-
 async function removeToppingFromOrderedPizza({ topping_id, ordered_pizza_id }) {
   try {
     const { rows } = await client.query(
@@ -190,15 +189,13 @@ async function deleteTopping(id) {
 }
 
 module.exports = {
-  createIngredient,
-  updateIngredient,
-  getAllIngredients,
-  getIngredientById,
-  getIngredientByTitle,
-  getIngredientsByCategory,
-  attachIngredientToPizza,
-  removeIngredientFromPizza,
-  attachIngredientToCategory,
-  removeIngredientFromCategory,
-  deleteIngredient,
+  createTopping,
+  updateTopping,
+  getAllToppings,
+  getToppingById,
+  getToppingByTitle,
+  getToppingsByOrderedPizza,
+  attachToppingToOrderedPizza,
+  removeToppingFromOrderedPizza,
+  deleteTopping,
 };
