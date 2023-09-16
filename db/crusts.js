@@ -77,8 +77,30 @@ async function getCrustById(id) {
     }
 }
 
+async function getCrustByTitle(title) {
+    try {
+        const {
+            rows: [crust],
+        } = await client.query(`
+            SELECT *
+            FROM crust_options
+            WHERE title = $1
+        
+        
+        `, [title])
+        return crust;
+    } catch (error) {
+        console.error("Error getting crust by title: ", error)
+        throw error;
+    }
+}
+
+
+
 
 module.exports = {
     createCrust,
     updateCrust,
+    getAllCrusts,
+    getCrustById,
 }
