@@ -95,7 +95,20 @@ async function getCrustByTitle(title) {
     }
 }
 
-
+async function addCrustToOrderedPizza({ crustId, pizzaId }) {
+    try {
+        await client.query(`
+            UPDATE ordered_pizza
+            SET crust = $1
+            WHERE ordered_pizza_id = $2
+        
+        `, [crustId, pizzaId])
+        return "Crust attached to ordered pizza successfully"
+    } catch (error) {
+        console.error("Error adding crust to ordered pizza: ", error);
+        throw error;
+    }
+}
 
 
 module.exports = {

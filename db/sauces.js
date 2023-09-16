@@ -96,7 +96,7 @@ async function getSauceByTitle(title) {
     }
 }
 
-async function addSauceToOrderedPizza(sauceId, pizzaId) {
+async function addSauceToOrderedPizza({ sauceId, pizzaId }) {
     try {
         await client.query(`
             UPDATE ordered_pizza
