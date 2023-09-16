@@ -60,10 +60,12 @@ async function createAdmin({
 async function getAllUsers() {
   try {
     const { rows: users } = await client.query(`
-            SELECT user_id, username, email
+            SELECT *
             FROM users;
         `);
 
+
+    users.forEach(user=>delete user.password);
     return users;
   } catch (error) {
     console.error("Error getting all users: ", error);
@@ -71,7 +73,7 @@ async function getAllUsers() {
   }
 }
 
-async function getUserByUsername(username) {
+async function getUserByEmail(email) {
   try {
     const {
       rows: [user],
@@ -82,7 +84,7 @@ async function getUserByUsername(username) {
             WHERE username = $1; 
             
             `,
-      [username]
+      [email]
     );
 
     delete user.password;
@@ -100,7 +102,6 @@ async function getUserByUserId(userId) {
     } = await client.query(
       `
             SELECT *
-            FROM users
             WHERE id = $1;
             
             `,
