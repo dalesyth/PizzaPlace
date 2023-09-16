@@ -156,43 +156,35 @@ async function removeToppingFromOrderedPizza({ topping_id, ordered_pizza_id }) {
     );
     return rows;
   } catch (error) {
-    console.error("Error removing ingredient from pizza: ", error);
+    console.error("Error removing topping from ordered pizza: ", error);
     throw error;
   }
 }
 
-async function deleteIngredient(id) {
+async function deleteTopping(id) {
   try {
     await client.query(
       `
-            DELETE FROM ingredient_category
-            WHERE ingredient_id = $1
-            `,
-      [id]
-    );
-
-    await client.query(
-      `
-            DELETE FROM pizza_order
-            WHERE ingredient_id = $1
+            DELETE FROM pizza_toppings
+            WHERE topping_id = $1
             `,
       [id]
     );
 
     const {
-      rows: [ingredient],
+      rows: [topping],
     } = await client.query(
       `
-            DELETE FROM ingredients
-            WHERE id = $1
+            DELETE FROM topping_options
+            WHERE topping_id = $1
             
             `,
       [id]
     );
 
-    return ingredient;
+    return topping;
   } catch (error) {
-    console.error("Error deleting ingredient: ", error);
+    console.error("Error deleting topping: ", error);
     throw error;
   }
 }
