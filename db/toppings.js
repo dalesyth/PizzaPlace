@@ -1,4 +1,4 @@
-const { client } = require("./index")
+const { client } = require("./index");
 
 async function createTopping({ title, image_name }) {
   try {
@@ -105,7 +105,7 @@ async function getToppingByTitle(title) {
   }
 }
 
-async function getIngredientsByOrderedPizza(ordered_pizza_id) {
+async function getToppingsByOrderedPizza(ordered_pizza_id) {
   try {
     const { rows } = await client.query(
       `
@@ -125,30 +125,23 @@ async function getIngredientsByOrderedPizza(ordered_pizza_id) {
   }
 }
 
-async function attachIngredientToPizza({
-  ingredientId,
-  orderId,
-  pizzaPrice,
-  quantity,
-  size,
-}) {
+async function attachToppingToOrderedPizza({ topping_id, pizza_id }) {
   try {
-    const { rows } = await client.query(
+    await client.query(
       `
-            INSERT INTO pizza_order
-            (ingredient_id, order_id, pizza_price, quantity, size)
-            VALUES ($1, $2, $3, $4, $5)
-            RETURNING *;
-            
-            `,
-      [ingredientId, orderId, pizzaPrice, quantity, size]
+      INSERT INTO pizza_toppings (topping_id, pizza_id)
+      VALUES ($1, $2);
+      `,
+      [topping_id, pizza_id]
     );
-    return rows;
+
+    return "Topping attached to ordered pizza successfully";
   } catch (error) {
-    console.error("Error attaching ingredient to pizza: ", error);
+    console.error("Error attaching topping to ordered pizza", error);
     throw error;
   }
 }
+
 
 async function removeIngredientFromPizza(id) {
   try {
@@ -164,42 +157,6 @@ async function removeIngredientFromPizza(id) {
     return rows;
   } catch (error) {
     console.error("Error removing ingredient from pizza: ", error);
-    throw error;
-  }
-}
-
-async function attachIngredientToCategory(ingredientId, categoryId) {
-  try {
-    const { rows } = await client.query(
-      `
-            INSERT INTO ingredient_category
-            (ingredient_id, category_id)
-            VALUES ($1, $2)
-            RETURNING *
-            `,
-      [ingredientId, categoryId]
-    );
-    return rows;
-  } catch (error) {
-    console.error("Error attaching ingredient to category: ", error);
-    throw error;
-  }
-}
-
-async function removeIngredientFromCategory(ingredientId, categoryId) {
-  try {
-    const { rows } = await client.query(
-      `
-            DELETE FROM ingredient_category
-            WHERE ingredient_id = $1 AND category_id = $2
-            
-            `,
-      [ingredientId, categoryId]
-    );
-
-    return rows;
-  } catch (error) {
-    console.error("Error removing ingredient from category: ", error);
     throw error;
   }
 }
@@ -239,8 +196,6 @@ async function deleteIngredient(id) {
     throw error;
   }
 }
-
-
 
 module.exports = {
   createIngredient,
