@@ -46,9 +46,39 @@ async function updateCrust(id, ...fields) {
   }
 }
 
+async function getAllCrusts() {
+    try {
+        const { rows } = await client.query(`
+            SELECT *
+            FROM crust_options
 
+        `)
+        return rows;
+    } catch (error) {
+        console.error("Error getting all crust options: ", error)
+        throw error;
+    }
+}
+
+async function getCrustById(id) {
+    try {
+        const {
+            rows: [crust],
+        } = await client.query(`
+            SELECT *
+            FROM crust_options
+            WHERE crust_id = $1
+        
+        `, [id])
+        return crust;
+    } catch (error) {
+        console.error("Error getting crust by id: ", error)
+        throw error;
+    }
+}
 
 
 module.exports = {
     createCrust,
+    updateCrust,
 }
