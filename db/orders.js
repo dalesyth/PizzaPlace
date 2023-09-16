@@ -105,8 +105,6 @@ async function deleteOrder(orderId) {
   }
 }
 
-
-
 module.exports = {
   createOrder,
   getOrderByOrderId,

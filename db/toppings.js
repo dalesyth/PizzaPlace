@@ -1,34 +1,34 @@
 const { client } = require("./index")
 
-async function createIngredient({ title, image_name }) {
+async function createTopping({ title, image_name }) {
   try {
     const {
-      rows: [ingredient],
+      rows: [topping],
     } = await client.query(
       `
-            INSERT INTO ingredients (title, image_name)
+            INSERT INTO topping_options (title, image_name)
             VALUES ($1, $2)
             RETURNING *;
             `,
       [title, image_name]
     );
 
-    return ingredient;
+    return topping;
   } catch (error) {
-    console.error("Error creating ingredient: ", error);
+    console.error("Error creating topping: ", error);
     throw error;
   }
 }
 
-async function updateIngredient(id, ...fields) {
+async function updateTopping(id, ...fields) {
   let dataArray = Object.values(fields[0]);
   const setString = Object.keys(fields[0])
     .map((key, index) => `"${key}"=$${index + 1}`)
     .join(",");
   const sql = `
-            UPDATE ingredients
+            UPDATE topping_options
             SET ${setString}
-            WHERE id=$${dataArray.length + 1}
+            WHERE topping_id=$${dataArray.length + 1}
             RETURNING *;
             `;
   dataArray.push(id);
@@ -39,28 +39,28 @@ async function updateIngredient(id, ...fields) {
   }
   try {
     const {
-      rows: [ingredient],
+      rows: [topping],
     } = await client.query(sql, dataArray);
-    console.log("db ingredient: ", ingredient);
-    return ingredient;
+    console.log("db topping: ", topping);
+    return topping;
   } catch (error) {
-    console.error("Error updating ingredient: ", error);
+    console.error("Error updating topping: ", error);
     throw error;
   }
 }
 
-async function getAllIngredients() {
+async function getAllToppings() {
   try {
     const { rows } = await client.query(
       `
             SELECT *
-            FROM ingredients
+            FROM topping_options
             
             `
     );
     return rows;
   } catch (error) {
-    console.error("Error getting all ingredients: ", error);
+    console.error("Error getting all toppings: ", error);
     throw error;
   }
 }
