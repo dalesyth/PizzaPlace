@@ -47,6 +47,21 @@ async function updateSauce(id, ...fields) {
     console.error("Error updating sauce: ", error);
     throw error;
   }
+}
+
+async function getAllSauces() {
+    try {
+        const { rows } = await client.query(`
+            SELECT *
+            FROM sauce_options
+        
+        `)
+        return rows;
+    } catch (error) {
+        console.error("Error getting all sauces: ", error)
+        throw error;
+    }
+}
 
 
 
@@ -55,5 +70,6 @@ async function updateSauce(id, ...fields) {
 
 module.exports = {
     createSauce,
+    updateSauce,
 
 }
