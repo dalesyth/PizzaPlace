@@ -110,10 +110,34 @@ async function addCrustToOrderedPizza({ crustId, pizzaId }) {
     }
 }
 
+async function deleteCrust(id) {
+    try {
+        await client.query(`
+            DELETE FROM ordered_pizza
+            WHERE crust = $1
+        
+        `, [id])
+
+        await client.query(`
+            DELETE FROM crust_options
+            WHERE crust_id = $1
+        
+        `, [id])
+        return "Crust option successfully removed from db"
+    } catch (error) {
+        console.error("Error deleting crust option: ", error);
+        throw error;
+    }
+}
+
 
 module.exports = {
     createCrust,
     updateCrust,
     getAllCrusts,
     getCrustById,
+    getCrustByTitle,
+    addCrustToOrderedPizza,
+    deleteCrust,
+
 }
