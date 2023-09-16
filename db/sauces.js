@@ -96,7 +96,19 @@ async function getSauceByTitle(title) {
     }
 }
 
-
+async function addSauceToOrderedPizza(sauceId, pizzaId) {
+    try {
+        await client.query(`
+            UPDATE ordered_pizza
+            SET sauce = $1
+            WHERE ordered_pizza_id = $2
+        `, [sauceId, pizzaId])
+        return "Sauce attached to ordered pizza successfully"
+    } catch (error) {
+        console.error("Error added sauce to ordered pizza: ", error)
+        throw error;
+    }
+}
 
 
 module.exports = {
@@ -104,5 +116,6 @@ module.exports = {
     updateSauce,
     getAllSauces,
     getSauceById,
-    getSauceByTitle
+    getSauceByTitle,
+    addSauceToOrderedPizza,
 }
