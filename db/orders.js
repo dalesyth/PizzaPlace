@@ -1,23 +1,29 @@
 const { client } = require("./index");
 
-async function createOrder({ user_id, order_date, order_total }) {
-  try {
-    const {
-      rows: [order],
-    } = await client.query(
-      `
-        INSERT INTO orders (user_id, order_date, order_total)
-        VALUES ($1, $2, $3)
-        RETURNING *;
-        `,
-      [user_id, order_date, order_total]
-    );
+async function createOrder({ ...fields }) {
+  const dataArray = Object.values(fields);
+  //Build fields list
+  let columnNames = Object.keys(fields)
+    .map((key) => `"${key}"`)
+    .join(", ");
+  //Build VALUES place holder.
+  let valuePlaceHolders = Object.keys(fields)
+    .map((keys, index) => {
+      return `$${index + 1}`;
+    })
+    .join(", ");
 
-    return order;
-  } catch (error) {
-    console.error("Error creating order: ", error);
-    throw error;
-  }
+  const newOrderSQL = `
+        INSERT INTO orders
+        (${columnNames})
+        VALUES(${valuePlaceHolders})
+        RETURNING *;
+        `;
+
+  const {
+    rows: [order],
+  } = await client.query(newOrderSQL, dataArray);
+  return order;
 }
 
 async function getAllOpenOrders() {
