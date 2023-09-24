@@ -63,6 +63,28 @@ async function createAdmin({
   }
 }
 
+async function getUser({ email, password }) {
+  try {
+    const user = await getUserByEmail(email);
+    
+
+    if (!user) {
+      console.log("Error getting user");
+      return null;
+    }
+
+    const hashedPassword = user.password;
+    const isValid = await bcrypt.compare(password, hashedPassword);
+
+    if (isValid) {
+      delete user.password;
+      return user;
+    }
+  } catch (error) {
+    console.error("Error getting user: ", error);
+  }
+}
+
 async function getAllUsers() {
   try {
     const { rows: users } = await client.query(`
@@ -168,4 +190,5 @@ module.exports = {
   getUserByEmail,
   getUserByUserId,
   deleteUser,
+  getUser,
 };

@@ -55,6 +55,25 @@ usersRouter.post("/register", async (req, res, next) => {
   }
 });
 
+usersRouter.post("/login", async (req, res, next) => {
+    const { email, password } = req.body;
+
+    if(!email || !password) {
+        next({
+            message: "Please provide both an email and password to log in",
+            name: "MissingCredentialsError",
+            error: "Please provide both an email and password to log in",
+        });
+    }
+
+    try {
+        
+    } catch ({ name, message }) {
+        console.error({ name, message });
+        next({ name, message })
+    }
+})
+
 module.exports = {
   usersRouter,
 };
