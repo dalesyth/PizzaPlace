@@ -91,6 +91,7 @@ usersRouter.post("/login", async (req, res, next) => {
 });
 
 // GET /api/users/me
+
 usersRouter.get("/me", requireUser, async (req, res, next) => {
     const user = req.user;
 
@@ -102,6 +103,17 @@ usersRouter.get("/me", requireUser, async (req, res, next) => {
     }
 })
 
+// GET /api/users
+
+usersRouter.get("/", async (req, res, next) => {
+    try {
+        const allUsers = await getAllUsers()
+        res.status(200).send(allUsers);
+    } catch ({ name, message }) {
+        console.error({ name, message })
+        next({ name, message })
+    }
+})
 
 
 module.exports = {
