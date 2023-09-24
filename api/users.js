@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { REACT_APP_JWT_SCRET, JWT_EXPIRATION_TIME } = process.env;
 const usersRouter = express.Router();
-const { getUserByEmail, createUser } = require("../db/users");
+const { getUserByEmail, createUser, getUser } = require("../db/users");
 
 usersRouter.post("/register", async (req, res, next) => {
   const { first_name, last_name, email, password, phone } = req.body;
@@ -67,6 +67,19 @@ usersRouter.post("/login", async (req, res, next) => {
     }
 
     try {
+      const user = await getUser({ email, password });
+      
+      if (user) {
+        const token = jwt.sign({ id: user.id, email }, REACT_APP_JWT_SCRET);
+
+        res.status(200).send({ message: "You are logged in!", token, user });
+      } else {
+        next({
+            message: "The email or password you have entered is incorrect",
+            name: "IncorrectCredentialsError",
+            error: "Email or password is incorrect",
+        });
+      }
         
     } catch ({ name, message }) {
         console.error({ name, message });
