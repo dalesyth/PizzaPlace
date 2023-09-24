@@ -5,6 +5,8 @@ const { REACT_APP_JWT_SCRET, JWT_EXPIRATION_TIME } = process.env;
 const usersRouter = express.Router();
 const { getUserByEmail, createUser, getUser } = require("../db/users");
 
+// POST /api/users/register
+
 usersRouter.post("/register", async (req, res, next) => {
   const { first_name, last_name, email, password, phone } = req.body;
   try {
@@ -55,37 +57,52 @@ usersRouter.post("/register", async (req, res, next) => {
   }
 });
 
-usersRouter.post("/login", async (req, res, next) => {
-    const { email, password } = req.body;
+// POST /api/users/login
 
-    if(!email || !password) {
-        next({
-            message: "Please provide both an email and password to log in",
-            name: "MissingCredentialsError",
-            error: "Please provide both an email and password to log in",
-        });
+usersRouter.post("/login", async (req, res, next) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    next({
+      message: "Please provide both an email and password to log in",
+      name: "MissingCredentialsError",
+      error: "Please provide both an email and password to log in",
+    });
+  }
+
+  try {
+    const user = await getUser({ email, password });
+
+    if (user) {
+      const token = jwt.sign({ id: user.id, email }, REACT_APP_JWT_SCRET);
+
+      res.status(200).send({ message: "You are logged in!", token, user });
+    } else {
+      next({
+        message: "The email or password you have entered is incorrect",
+        name: "IncorrectCredentialsError",
+        error: "Email or password is incorrect",
+      });
     }
+  } catch ({ name, message }) {
+    console.error({ name, message });
+    next({ name, message });
+  }
+});
+
+// GET /api/users/me
+usersRouter.get("/me", requireUser, async (req, res, next) => {
+    const user = req.user;
 
     try {
-      const user = await getUser({ email, password });
-      
-      if (user) {
-        const token = jwt.sign({ id: user.id, email }, REACT_APP_JWT_SCRET);
-
-        res.status(200).send({ message: "You are logged in!", token, user });
-      } else {
-        next({
-            message: "The email or password you have entered is incorrect",
-            name: "IncorrectCredentialsError",
-            error: "Email or password is incorrect",
-        });
-      }
-        
+        res.send(user);
     } catch ({ name, message }) {
-        console.error({ name, message });
+        console.error({ name, message })
         next({ name, message })
     }
 })
+
+
 
 module.exports = {
   usersRouter,
