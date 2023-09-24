@@ -4,6 +4,7 @@ require("dotenv").config();
 const { REACT_APP_JWT_SCRET, JWT_EXPIRATION_TIME } = process.env;
 const usersRouter = express.Router();
 const { getUserByEmail, createUser, getUser } = require("../db/users");
+const { requireUser, requireAdmin } = require("./utils");
 
 // POST /api/users/register
 
@@ -93,28 +94,27 @@ usersRouter.post("/login", async (req, res, next) => {
 // GET /api/users/me
 
 usersRouter.get("/me", requireUser, async (req, res, next) => {
-    const user = req.user;
+  const user = req.user;
 
-    try {
-        res.send(user);
-    } catch ({ name, message }) {
-        console.error({ name, message })
-        next({ name, message })
-    }
-})
+  try {
+    res.send(user);
+  } catch ({ name, message }) {
+    console.error({ name, message });
+    next({ name, message });
+  }
+});
 
 // GET /api/users
 
-usersRouter.get("/", async (req, res, next) => {
-    try {
-        const allUsers = await getAllUsers()
-        res.status(200).send(allUsers);
-    } catch ({ name, message }) {
-        console.error({ name, message })
-        next({ name, message })
-    }
-})
-
+usersRouter.get("/", requireAdmin, async (req, res, next) => {
+  try {
+    const allUsers = await getAllUsers();
+    res.status(200).send(allUsers);
+  } catch ({ name, message }) {
+    console.error({ name, message });
+    next({ name, message });
+  }
+});
 
 module.exports = {
   usersRouter,
