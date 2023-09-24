@@ -3,7 +3,12 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { REACT_APP_JWT_SCRET, JWT_EXPIRATION_TIME } = process.env;
 const usersRouter = express.Router();
-const { getUserByEmail, createUser, getUser } = require("../db/users");
+const {
+  getUserByEmail,
+  createUser,
+  getUser,
+  getUserByUserId,
+} = require("../db/users");
 const { requireUser, requireAdmin } = require("./utils");
 
 // POST /api/users/register
@@ -110,6 +115,47 @@ usersRouter.get("/", requireAdmin, async (req, res, next) => {
   try {
     const allUsers = await getAllUsers();
     res.status(200).send(allUsers);
+  } catch ({ name, message }) {
+    console.error({ name, message });
+    next({ name, message });
+  }
+});
+
+// GET /api/users/:userId
+
+usersRouter.get("/:userId", async (req, res, next) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await getUserByUserId(userId);
+    if (!user) {
+      next({
+        message: "User not found",
+        name: "userNotFoundError",
+        error: "User not found",
+      });
+    }
+    res.status(200).send(user);
+  } catch ({ name, message }) {
+    console.error({ name, message });
+    next({ name, message });
+  }
+});
+
+// GET /api/users/useremail/:userEmail
+
+usersRouter.get("/useremail/:email", async (req, res, next) => {
+  const { email } = req.params;
+  try {
+    const user = await getUserByEmail(email);
+    if (!user) {
+      next({
+        message: "User not found",
+        name: "userNotFoundError",
+        error: "User not found",
+      });
+    }
+    res.status(200).send(user);
   } catch ({ name, message }) {
     console.error({ name, message });
     next({ name, message });

@@ -27,7 +27,7 @@ apiRouter.use("/orders", ordersRouter);
 
 
 // ERROR HANDLER
-apiRouter.use((error, req, res) => {
+apiRouter.use((error, req, res, next) => {
     res.status(500).json({
         name: error.name,
         message: error.message,
