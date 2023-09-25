@@ -5,6 +5,7 @@ const {
   getToppingByTitle,
   getToppingsByOrderedPizza,
   attachToppingToOrderedPizza,
+  removeToppingFromOrderedPizza,
 } = require("../db/toppings");
 const toppingsRouter = express.Router();
 
@@ -77,9 +78,9 @@ toppingsRouter.get("/:orderedPizzaId/orderedPizza", async (req, res, next) => {
     }
 })
 
-// PATCH /api/toppings/:pizzaId/orderedPizza
+// PATCH /api/toppings/:pizzaId/addTopping
 
-toppingsRouter.patch("/:pizzaId/orderedPizza", async (req, res, next) => {
+toppingsRouter.patch("/:pizzaId/addTopping", async (req, res, next) => {
     const { pizzaId } = req.params
     const { toppingId } = req.body
     try {
@@ -96,6 +97,24 @@ toppingsRouter.patch("/:pizzaId/orderedPizza", async (req, res, next) => {
         next({ name, message })
     }
 })
+
+// PATCH /api/toppings/:pizzaId/removeTopping
+
+toppingsRouter.patch("/:pizzaId/removeTopping", async (req, res, next) => {
+    const { pizzaId } = req.params
+    const { toppingId } = req.body
+    try {
+        const topping = await removeToppingFromOrderedPizza({ toppingId, pizzaId })
+
+        if (topping) {
+            res.status(200).send('Topping removed from pizza')
+        } else {
+            res.status(404).send('Failed to remove topping from pizza')
+        }
+    } catch ({ name, message }) {
+        next({ name, message })
+    }
+});
 
 module.exports = {
   toppingsRouter,
