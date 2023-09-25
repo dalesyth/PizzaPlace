@@ -1,7 +1,7 @@
 const express = require("express");
 const saucesRouter = express.Router();
 const { requireAdmin } = require("./utils");
-const { getSauceById, getSauceByTitle, createSauce } = require("../db/sauces");
+const { getSauceById, getSauceByTitle, createSauce, addSauceToOrderedPizza } = require("../db/sauces");
 const { getAllSauces } = require;
 
 // GET /api/sauces
@@ -74,6 +74,24 @@ saucesRouter.post("/", requireAdmin, async (req, res, next) => {
             res.status(404).send(`Failed to create new sauce: ${title}`)
         } else {
             res.status(200).send(newSauce)
+        }
+    } catch ({ name, message }) {
+        next({ name, message })
+    }
+})
+
+// PATCH /api/sauces/:orderedPizzaId
+
+toppingsRouter.patch("/:orderedPizzaId", async (req, res, next) => {
+    const { orderedPizzaId } = req.params
+    const { sauceId } = req.body
+    try {
+        const sauce = await addSauceToOrderedPizza({ sauceId, orderedPizzaId})
+
+        if (!sauce || sauce.length === 0) {
+            res.status(404).send("Failed to add sauce to pizza")
+        } else {
+            res.status(200).send("Sauce added to pizza")
         }
     } catch ({ name, message }) {
         next({ name, message })
