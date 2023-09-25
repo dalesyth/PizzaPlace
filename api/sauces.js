@@ -7,6 +7,7 @@ const {
   createSauce,
   addSauceToOrderedPizza,
   removeSauceFromOrderedPizza,
+  updateSauce,
 } = require("../db/sauces");
 const { getAllSauces } = require;
 
@@ -123,6 +124,30 @@ saucesRouter.patch("/:orderedPizzaId/removeSauce", async (req, res, next) => {
     next({ name, message });
   }
 });
+
+// PATCH /api/sauces/:sauceId/updateSauce
+
+saucesRouter.patch("/:sauceId/updateSauce", requireAdmin, async (req, res, next) => {
+    const { sauceId } = req.params
+    const { title, imageName } = req.body
+    try {
+        const existingSauce = await getSauceByTitle(title);
+
+        if (!existingSauce || existingSauce.length === 0) {
+            res.status(404).send(`Sauce ${title} not found`);
+        }
+
+        const updatedSauce = await updateSauce({ sauceId, title, imageName });
+
+        if (updatedSauce) {
+            res.status(200).send(updatedSauce);
+        } else {
+            res.status(404).send(`Failed to update topping: ${title}`);
+        }
+    } catch ({ name, message }) {
+        next({ name, message })
+    }
+})
 
 module.exports = {
   saucesRouter,
