@@ -1,7 +1,7 @@
 const express = require("express");
 const crustsRouter = express.Router();
 const { requireAdmin } = require("./utils");
-const { getAllCrusts, getCrustById, getCrustByTitle, createCrust } = require("../db/crusts");
+const { getAllCrusts, getCrustById, getCrustByTitle, createCrust, addCrustToOrderedPizza } = require("../db/crusts");
 
 // GET /api/crusts
 
@@ -70,6 +70,24 @@ crustsRouter.post("/", requireAdmin, async (req, res, next) => {
             res.status(404).send(`Failed to create new crust: ${title}`);
         } else {
             res.status(200).send(newCrust);
+        }
+    } catch ({ name, message }) {
+        next({ name, message })
+    }
+})
+
+// PATCH /api/crusts/:orderedPizzaId/addCrust
+
+crustsRouter.patch("/:orderedPizzaId/addCrust", async (req, res, next) => {
+    const { orderedPizzaId } = req.params;
+    const { crustId } = req.body;
+    try {
+        const crust = await addCrustToOrderedPizza({ crustId, orderedPizzaId });
+
+        if (!crust || crust.length === 0) {
+            res.status(404).send("Failed to add crust to pizza");
+        } else {
+            res.status(200).send("Crust added to pizza");
         }
     } catch ({ name, message }) {
         next({ name, message })
