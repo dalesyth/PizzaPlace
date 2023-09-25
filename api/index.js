@@ -15,6 +15,10 @@ apiRouter.use("/users", usersRouter);
 const ordersRouter = require('./orders')
 apiRouter.use("/orders", ordersRouter);
 
+// ROUTE: /api/toppings
+const toppingsRouter = require('./toppings')
+apiRouter.use("/toppings", toppingsRouter);
+
 
 
 

@@ -165,21 +165,21 @@ usersRouter.get("/useremail/:email", async (req, res, next) => {
 
 // DELETE /api/user/:userId
 
-usersRouter.delete("/:userId", requireAdmin, async(req, res, next) => {
-    const { userId } = req.params;
-    try {
-        const deletedUser = await deleteUser(userId);
+usersRouter.delete("/:userId", requireAdmin, async (req, res, next) => {
+  const { userId } = req.params;
+  try {
+    const deletedUser = await deleteUser(userId);
 
-        if (deletedUser) {
-            res.status(200).send("User has been deleted");
-        } else {
-            res.status(404).send("User not found or deletion failed");
-        }
-    } catch ({ name, message }) {
-        console.error({ name, message });
-        next({ name, message });
+    if (deletedUser) {
+      res.status(200).send("User has been deleted");
+    } else {
+      res.status(404).send("User not found or deletion failed");
     }
-})
+  } catch ({ name, message }) {
+    console.error({ name, message });
+    next({ name, message });
+  }
+});
 
 module.exports = {
   usersRouter,
