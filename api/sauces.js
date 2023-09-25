@@ -8,6 +8,7 @@ const {
   addSauceToOrderedPizza,
   removeSauceFromOrderedPizza,
   updateSauce,
+  deleteSauce,
 } = require("../db/sauces");
 const { getAllSauces } = require;
 
@@ -127,27 +128,48 @@ saucesRouter.patch("/:orderedPizzaId/removeSauce", async (req, res, next) => {
 
 // PATCH /api/sauces/:sauceId/updateSauce
 
-saucesRouter.patch("/:sauceId/updateSauce", requireAdmin, async (req, res, next) => {
-    const { sauceId } = req.params
-    const { title, imageName } = req.body
+saucesRouter.patch(
+  "/:sauceId/updateSauce",
+  requireAdmin,
+  async (req, res, next) => {
+    const { sauceId } = req.params;
+    const { title, imageName } = req.body;
     try {
-        const existingSauce = await getSauceByTitle(title);
+      const existingSauce = await getSauceByTitle(title);
 
-        if (!existingSauce || existingSauce.length === 0) {
-            res.status(404).send(`Sauce ${title} not found`);
-        }
+      if (!existingSauce || existingSauce.length === 0) {
+        res.status(404).send(`Sauce ${title} not found`);
+      }
 
-        const updatedSauce = await updateSauce({ sauceId, title, imageName });
+      const updatedSauce = await updateSauce({ sauceId, title, imageName });
 
-        if (updatedSauce) {
-            res.status(200).send(updatedSauce);
-        } else {
-            res.status(404).send(`Failed to update topping: ${title}`);
-        }
+      if (updatedSauce) {
+        res.status(200).send(updatedSauce);
+      } else {
+        res.status(404).send(`Failed to update topping: ${title}`);
+      }
     } catch ({ name, message }) {
-        next({ name, message })
+      next({ name, message });
     }
-})
+  }
+);
+
+// DELETE /api/sauces/:sauceId
+
+saucesRouter.delete("/:sauceId", requireAdmin, async (req, res, next) => {
+  const { sauceId } = req.params;
+  try {
+    const deletedSauce = await deleteSauce(sauceId);
+
+    if (deletedSauce) {
+      res.status(200).send(`Sauce ${deleteSauce.title} has been deleted`);
+    } else {
+      res.status(404).send("Failed to delete sauce");
+    }
+  } catch ({ name, message }) {
+    next({ name, message });
+  }
+});
 
 module.exports = {
   saucesRouter,
