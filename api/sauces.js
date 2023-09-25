@@ -2,6 +2,7 @@ const express = require("express");
 const saucesRouter = express.Router();
 const { requireAdmin } = require("./utils");
 const {
+  getAllSauces,
   getSauceById,
   getSauceByTitle,
   createSauce,
@@ -10,7 +11,7 @@ const {
   updateSauce,
   deleteSauce,
 } = require("../db/sauces");
-const { getAllSauces } = require;
+
 
 // GET /api/sauces
 
