@@ -4,6 +4,7 @@ const {
   getToppingById,
   getToppingByTitle,
   getToppingsByOrderedPizza,
+  attachToppingToOrderedPizza,
 } = require("../db/toppings");
 const toppingsRouter = express.Router();
 
@@ -76,7 +77,25 @@ toppingsRouter.get("/:orderedPizzaId/orderedPizza", async (req, res, next) => {
     }
 })
 
-toppingsRouter
+// PATCH /api/toppings/:pizzaId/orderedPizza
+
+toppingsRouter.patch("/:pizzaId/orderedPizza", async (req, res, next) => {
+    const { pizzaId } = req.params
+    const { toppingId } = req.body
+    try {
+        const topping = await attachToppingToOrderedPizza({ toppingId, pizzaId });
+
+        if (topping) {
+            res.status(200).send('Topping added to pizza')
+        } else {
+            res.status(404).send('Failed to add topping to pizza')
+        }
+
+
+    } catch ({ name, message }) {
+        next({ name, message })
+    }
+})
 
 module.exports = {
   toppingsRouter,
