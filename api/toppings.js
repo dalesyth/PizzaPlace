@@ -8,6 +8,7 @@ const {
   removeToppingFromOrderedPizza,
   deleteTopping,
   createTopping,
+  updateTopping,
 } = require("../db/toppings");
 const toppingsRouter = express.Router();
 
@@ -141,6 +142,30 @@ toppingsRouter.patch("/:pizzaId/removeTopping", async (req, res, next) => {
         next({ name, message })
     }
 });
+
+// PATCH /api/toppings/:toppingId/updateTopping
+
+toppingsRouter.patch("/:toppingId/updateTopping", async (req, res, next) => {
+    const { toppingId } = req.params;
+    const { title, imageName } = req.body;
+    try {
+        const existingTopping = await getToppingByTitle(title);
+
+        if (!existingTopping || existingTopping.length === 0) {
+            res.status(404).send(`Topping ${title} not found`)
+        }
+
+        const updatedTopping = await updateTopping({ toppingId, title, imageName });
+
+        if (updatedTopping) {
+            res.status(200).send(updatedTopping)
+        } else {
+            res.status(404).send(`Failed to update topping: ${title}`)
+        }
+    } catch ({ name, message }) {
+        next ({ name, message })
+    }
+})
 
 
 
