@@ -1,7 +1,7 @@
 const express = require("express");
 const crustsRouter = express.Router();
 const { requireAdmin } = require("./utils");
-const { getAllCrusts, getCrustById, getCrustByTitle } = require("../db/crusts");
+const { getAllCrusts, getCrustById, getCrustByTitle, createCrust } = require("../db/crusts");
 
 // GET /api/crusts
 
@@ -52,6 +52,29 @@ crustsRouter.get("/title/:title", async (req, res, next) => {
     next({ name, message });
   }
 });
+
+// POST /api/crusts
+
+crustsRouter.post("/", requireAdmin, async (req, res, next) => {
+    const { title, imageName } = req.body;
+    try {
+        const existingCrust = await getCrustByTitle(title);
+
+        if (existingCrust) {
+            res.status(400).send(`A crust with title: ${crust} already exists`);
+        }
+
+        const newCrust = await createCrust({ title, imageName });
+
+        if (!newCrust || newCrust.length === 0) {
+            res.status(404).send(`Failed to create new crust: ${title}`);
+        } else {
+            res.status(200).send(newCrust);
+        }
+    } catch ({ name, message }) {
+        next({ name, message })
+    }
+})
 
 module.exports = {
   crustsRouter,
