@@ -1,7 +1,7 @@
 const express = require("express");
 const crustsRouter = express.Router();
 const { requireAdmin } = require("./utils");
-const { getAllCrusts, getCrustById, getCrustByTitle, createCrust, addCrustToOrderedPizza, removeCrustFromOrderedPizza } = require("../db/crusts");
+const { getAllCrusts, getCrustById, getCrustByTitle, createCrust, addCrustToOrderedPizza, removeCrustFromOrderedPizza, updateCrust } = require("../db/crusts");
 
 // GET /api/crusts
 
@@ -106,6 +106,30 @@ crustsRouter.patch("/:orderedPizzaId/remvoveCrust", async (req, res, next) => {
             res.status(200).send("Crust removed from pizza");
         } else {
             res.status(404).send("Failed to remove crust from pizza");
+        }
+    } catch ({ name, message }) {
+        next({ name, message })
+    }
+})
+
+// PATCH /api/crusts/:crustId/updateCrust
+
+crustsRouter.patch("/:crustId/updateCrust", requireAdmin, async (req, res, next) => {
+    const { crustId } = req.params;
+    const { title, imageName } = req.body;
+    try {
+        const existingCrust = await getCrustByTitle(title);
+
+        if (!existingCrust || existingCrust.length === 0) {
+            res.status(404).send(`Crust ${title} not found`);
+        }
+
+        const updatedCrust = await updateCrust({ crustId, title, imageName });
+
+        if (updatedCrust) {
+            res.status(200).send(updatedCrust)
+        } else {
+            res.status(404).send(`Failed to update crust: ${title}`);
         }
     } catch ({ name, message }) {
         next({ name, message })
