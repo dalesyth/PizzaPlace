@@ -122,6 +122,29 @@ async function addCrustToOrderedPizza({ crustId, pizzaId }) {
   }
 }
 
+async function removeCrustFromOrderedPizza({ crustId, pizzaId }) {
+  try {
+    const { rows } = await client.query(
+      `
+        DELETE FROM ordered_pizza
+        WHERE crust = $1 AND ordered_pizza = $2
+        RETURNING *;
+      
+      `,
+      [crustId, pizzaId]
+    )
+
+    if (rows.length === 0) {
+      return null;
+    }
+
+    return "Crust removed from pizza";
+  } catch (error) {
+    console.error("Error removing crust from ordered pizza: ", error)
+    throw error;
+  }
+}
+
 async function deleteCrust(id) {
   try {
     await client.query(
@@ -155,5 +178,6 @@ module.exports = {
   getCrustById,
   getCrustByTitle,
   addCrustToOrderedPizza,
+  removeCrustFromOrderedPizza,
   deleteCrust,
 };

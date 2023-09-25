@@ -1,7 +1,7 @@
 const express = require("express");
 const crustsRouter = express.Router();
 const { requireAdmin } = require("./utils");
-const { getAllCrusts, getCrustById, getCrustByTitle, createCrust, addCrustToOrderedPizza } = require("../db/crusts");
+const { getAllCrusts, getCrustById, getCrustByTitle, createCrust, addCrustToOrderedPizza, removeCrustFromOrderedPizza } = require("../db/crusts");
 
 // GET /api/crusts
 
@@ -88,6 +88,24 @@ crustsRouter.patch("/:orderedPizzaId/addCrust", async (req, res, next) => {
             res.status(404).send("Failed to add crust to pizza");
         } else {
             res.status(200).send("Crust added to pizza");
+        }
+    } catch ({ name, message }) {
+        next({ name, message })
+    }
+})
+
+// PATCH /api/crusts/:orderedPizzaId/removeCrust
+
+crustsRouter.patch("/:orderedPizzaId/remvoveCrust", async (req, res, next) => {
+    const { orderedPizzaId } = req.params
+    const { crustId } = req.body
+    try {
+        const crust = await removeCrustFromOrderedPizza({ crustId, orderedPizzaId });
+
+        if (crust) {
+            res.status(200).send("Crust removed from pizza");
+        } else {
+            res.status(404).send("Failed to remove crust from pizza");
         }
     } catch ({ name, message }) {
         next({ name, message })
