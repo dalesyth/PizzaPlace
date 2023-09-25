@@ -146,14 +146,14 @@ async function removeToppingFromOrderedPizza({ topping_id, ordered_pizza_id }) {
   try {
     const { rows } = await client.query(
       `
-            DELETE FROM ordered_pizza
-            WHERE topping_id=$1 AND ordered_pizza_id=$2
+            DELETE FROM pizza_toppings
+            WHERE topping_id=$1 AND pizza_id=$2
             RETURNING *;
             
             `,
       [topping_id, ordered_pizza_id]
     );
-    return rows;
+    return "Topping removed from pizza";
   } catch (error) {
     console.error("Error removing topping from ordered pizza: ", error);
     throw error;
