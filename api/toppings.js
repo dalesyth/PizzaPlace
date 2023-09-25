@@ -6,6 +6,8 @@ const {
   getToppingsByOrderedPizza,
   attachToppingToOrderedPizza,
   removeToppingFromOrderedPizza,
+  deleteTopping,
+  createTopping,
 } = require("../db/toppings");
 const toppingsRouter = express.Router();
 
@@ -78,6 +80,30 @@ toppingsRouter.get("/:orderedPizzaId/orderedPizza", async (req, res, next) => {
     }
 })
 
+// POST /api/toppings
+
+toppingsRouter.post("/", async (req, res, next) => {
+    const { title, imageName } = req.body
+
+    try {
+        const existingTopping = await getToppingByTitle(title);
+
+        if (existingTopping) {
+            res.status(400).send(`A topping with title: ${title} already exists`)
+        } 
+
+        const newTopping = await createTopping({ title, imageName });
+
+        if (newTopping) {
+            res.status(200).send(newTopping)
+        } else {
+            res.status(404).send(`Failed to create new topping: ${title}`)
+        }
+    } catch ({ name, message }) {
+        next([ name, message ])
+    }
+})
+
 // PATCH /api/toppings/:pizzaId/addTopping
 
 toppingsRouter.patch("/:pizzaId/addTopping", async (req, res, next) => {
@@ -115,6 +141,25 @@ toppingsRouter.patch("/:pizzaId/removeTopping", async (req, res, next) => {
         next({ name, message })
     }
 });
+
+
+
+// DELETE /api/toppings/:toppingId
+
+toppingsRouter.delete("/:toppingId", async (req, res, next) => {
+    const { toppingId } = req.params
+    try {
+        const deletedTopping = await deleteTopping(toppingId);
+
+        if (deletedTopping) {
+            res.status(200).send(`Topping ${deletedTopping.title} has been deleted`)
+        } else {
+            res.status(404).send('Failed to delete topping')
+        }
+    } catch ({ name, message }) {
+        next({ name, message })
+    }
+})
 
 module.exports = {
   toppingsRouter,
