@@ -163,7 +163,7 @@ saucesRouter.delete("/:sauceId", requireAdmin, async (req, res, next) => {
     const deletedSauce = await deleteSauce(sauceId);
 
     if (deletedSauce) {
-      res.status(200).send(`Sauce ${deleteSauce.title} has been deleted`);
+      res.status(200).send(`Sauce ${deletedSauce.title} has been deleted`);
     } else {
       res.status(404).send("Failed to delete sauce");
     }
