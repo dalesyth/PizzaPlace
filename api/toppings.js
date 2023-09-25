@@ -1,5 +1,10 @@
 const express = require("express");
-const { getAllToppings, getToppingById, getToppingByTitle } = require("../db/toppings");
+const {
+  getAllToppings,
+  getToppingById,
+  getToppingByTitle,
+  getToppingsByOrderedPizza,
+} = require("../db/toppings");
 const toppingsRouter = express.Router();
 
 // GET /api/toppings
@@ -38,20 +43,40 @@ toppingsRouter.get("/:toppingId", async (req, res, next) => {
 // GET /api/toppings/title/:title
 
 toppingsRouter.get("/title/:title", async (req, res, next) => {
-    const { title } = req.params;
+  const { title } = req.params;
+
+  try {
+    const topping = await getToppingByTitle(title);
+
+    if (!topping || topping.length === 0) {
+      res.status(404).send("Topping not found");
+    } else {
+      res.status(200).send(topping);
+    }
+  } catch ({ name, message }) {
+    next({ name, message });
+  }
+});
+
+//GET /api/toppings/:orderedPizzaId/orderedPizza
+
+toppingsRouter.get("/:orderedPizzaId/orderedPizza", async (req, res, next) => {
+    const { orderedPizzaId } = req.params;
 
     try {
-        const topping = await getToppingByTitle(title);
+        const toppings = await getToppingsByOrderedPizza(orderedPizzaId);
 
-        if (!topping || topping.length === 0) {
-            res.status(404).send('Topping not found')
+        if (!toppings || toppings.length === 0) {
+            res.status(404).send('Toppings not found')
         } else {
-            res.status(200).send(topping)
+            res.status(200).send(toppings)
         }
     } catch ({ name, message }) {
         next({ name, message })
     }
 })
+
+toppingsRouter
 
 module.exports = {
   toppingsRouter,
