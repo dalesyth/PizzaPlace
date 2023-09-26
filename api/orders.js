@@ -1,5 +1,5 @@
 const express = require('express')
-const { getAllOpenOrders } = require('../db/orders')
+const { getAllOpenOrders, getOrderByOrderId } = require('../db/orders')
 const ordersRouter = express.Router()
 
 // GET /api/orders
@@ -18,9 +18,22 @@ ordersRouter.get("/", async (req, res, next) => {
     }
 })
 
-// GET /api/orders/:orderId
+// GET /api/orders/:orderId/order
 
-orders
+ordersRouter.get("/:orderId", async (req, res, next) => {
+    const { orderId } = req.params
+    try {
+        const order = await getOrderByOrderId(orderId)
+
+        if (!order || order.length === 0) {
+            res.status(404).send("Unable to retrieve order")
+        } else {
+            res.status(200).send(order)
+        }
+    } catch ({ name, message }) {
+        next({ name, message })
+    }
+})
 
 
 
