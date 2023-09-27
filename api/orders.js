@@ -1,32 +1,49 @@
-const express = require('express')
-const { getAllOpenOrders, getOrderByOrderId } = require('../db/orders')
-const ordersRouter = express.Router()
+const express = require("express");
+const { getAllOpenOrders, getOrderByOrderId, getOrderByUserId } = require("../db/orders");
+const ordersRouter = express.Router();
 
 // GET /api/orders
 
 ordersRouter.get("/", async (req, res, next) => {
-    try {
-        const orders = await getAllOpenOrders()
+  try {
+    const orders = await getAllOpenOrders();
 
-        if (!orders || orders.length === 0) {
-            res.status(404).send("Unable to retrieve open orders")
-        } else {
-            res.status(200).send(orders)
-        }
-    } catch ({ name, message }) {
-        next({ name, message })
+    if (!orders || orders.length === 0) {
+      res.status(404).send("Unable to retrieve open orders");
+    } else {
+      res.status(200).send(orders);
     }
-})
+  } catch ({ name, message }) {
+    next({ name, message });
+  }
+});
 
 // GET /api/orders/:orderId/order
 
-ordersRouter.get("/:orderId", async (req, res, next) => {
-    const { orderId } = req.params
+ordersRouter.get("/:orderId/order", async (req, res, next) => {
+  const { orderId } = req.params;
+  try {
+    const order = await getOrderByOrderId(orderId);
+
+    if (!order || order.length === 0) {
+      res.status(404).send("Unable to retrieve order");
+    } else {
+      res.status(200).send(order);
+    }
+  } catch ({ name, message }) {
+    next({ name, message });
+  }
+});
+
+// GET /api/orders/:userId/order
+
+ordersRouter.get("/:userId/order", async (req, res, next) => {
+    const { userId } = req.params
     try {
-        const order = await getOrderByOrderId(orderId)
+        const order = await getOrderByUserId(userId);
 
         if (!order || order.length === 0) {
-            res.status(404).send("Unable to retrieve order")
+            req.status(404).send("Unable to retrieve order")
         } else {
             res.status(200).send(order)
         }
@@ -35,8 +52,4 @@ ordersRouter.get("/:orderId", async (req, res, next) => {
     }
 })
 
-
-
-
-
-module.exports = { ordersRouter }
+module.exports = { ordersRouter };
