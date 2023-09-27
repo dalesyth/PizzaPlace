@@ -50,6 +50,7 @@ async function updateOrder(id, ...fields) {
     return order
   } catch (error) {
     console.error("Error updating order: ", error)
+    throw error
   }
 }
 
@@ -114,6 +115,25 @@ async function getOrderByUserId(userId) {
   }
 }
 
+async function attachPizzaToOrder(orderId, pizzaDetails) {
+  try {
+    const { pizza_price, quantity, size } = pizzaDetails;
+
+    const {
+      rows: [pizza],
+    } = await client.query(`
+      INSERT INTO ordered_pizza (order_id, pizza_price, quantity, size)
+      VALUES ($1, $2, $3, $4)
+      RETURNING *;
+    `, [orderId, pizza_price, quantity, size]);
+
+    return pizza
+  } catch (error) {
+    console.error("Error attaching pizza to order: ", error)
+    throw error;
+  }
+}
+
 async function deleteOrder(orderId) {
   try {
     await client.query(
@@ -144,5 +164,6 @@ module.exports = {
   getOrderByOrderId,
   getAllOpenOrders,
   getOrderByUserId,
+  attachPizzaToOrder,
   deleteOrder,
 };

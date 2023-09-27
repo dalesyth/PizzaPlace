@@ -27,15 +27,9 @@ apiRouter.use("/sauces", saucesRouter);
 const crustsRouter = require('./crusts')
 apiRouter.use("/crusts", crustsRouter)
 
-
-
-
-
-
-
-
-
-
+// ROUTE: /api/ordered-pizza
+const orderedPizzaRouter = require('./orderedpizzas')
+apiRouter.use("/ordered-pizza", orderedPizzaRouter)
 
 
 // ERROR HANDLER
