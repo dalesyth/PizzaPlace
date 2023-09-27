@@ -1,5 +1,5 @@
 const express = require("express");
-const { getAllOpenOrders, getOrderByOrderId, getOrderByUserId } = require("../db/orders");
+const { getAllOpenOrders, getOrderByOrderId, getOrderByUserId, createOrder } = require("../db/orders");
 const ordersRouter = express.Router();
 
 // GET /api/orders
@@ -43,7 +43,7 @@ ordersRouter.get("/:userId/order", async (req, res, next) => {
         const order = await getOrderByUserId(userId);
 
         if (!order || order.length === 0) {
-            req.status(404).send("Unable to retrieve order")
+            res.status(404).send("Unable to retrieve order")
         } else {
             res.status(200).send(order)
         }
@@ -51,5 +51,25 @@ ordersRouter.get("/:userId/order", async (req, res, next) => {
         next({ name, message })
     }
 })
+
+// POST /api/orders/
+
+ordersRouter.post("/", async (req, res, next) => {
+    const { userId, orderDate, orderTotal } = req.body
+
+    try {
+        const order = await createOrder({ userId, orderDate, orderTotal })
+
+        if (!order || order.length === 0) {
+            res.status(404).send("Unable to create order")
+        } else {
+            res.status(200).send(order)
+        }
+    } catch ({ name, message }) {
+        next({ name, message })
+    }
+})
+
+
 
 module.exports = { ordersRouter };

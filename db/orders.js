@@ -26,6 +26,33 @@ async function createOrder({ ...fields }) {
   return order;
 }
 
+async function updateOrder(id, ...fields) {
+  let dataArray = Object.values(fields[0]);
+  const setString = Object.keys(fields[0])
+    .map((key, index) => `"${key}"=$${index + 1}`)
+    .join(",");
+  const sql = `
+          UPDATE orders
+          SET ${setString}
+          WHERE order_id=$${dataArray.length + 1}
+          RETURNING *;
+          `;
+  dataArray.push(id);
+
+  if (setString.length === 0) {
+    return;
+  }
+
+  try {
+    const {
+      rows: [order]
+    } = await client.query(sql, dataArray);
+    return order
+  } catch (error) {
+    console.error("Error updating order: ", error)
+  }
+}
+
 async function getAllOpenOrders() {
   try {
     const {
@@ -113,6 +140,7 @@ async function deleteOrder(orderId) {
 
 module.exports = {
   createOrder,
+  updateOrder,
   getOrderByOrderId,
   getAllOpenOrders,
   getOrderByUserId,
