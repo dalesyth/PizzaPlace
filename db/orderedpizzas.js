@@ -57,9 +57,12 @@ async function getOrderedPizzaByPizzaId(ordered_pizza_id) {
             rows: [orderedPizza],
         } = await client.query(
             `
-                SELECT *
+                SELECT ordered_pizza.*, pizza_toppings.*, crust_options.*, sauce_options.*
                 FROM ordered_pizza
-                WHERE ordered_pizza_id = $1
+                JOIN pizza_toppings ON pizza_toppings.pizza_id = ordered_pizza.ordered_pizza_id
+                JOIN crust_options ON crust_options.crust_id = ordered_pizza.crust
+                JOIN sauce_options ON sauce_options.sauce_id = ordered_pizza.sauce
+                WHERE ordered_pizza.ordered_pizza_id = $1
             `,[ordered_pizza_id]
         )
         return orderedPizza
@@ -71,17 +74,19 @@ async function getOrderedPizzaByPizzaId(ordered_pizza_id) {
 
 async function getOrderedPizzasByUser(user_id) {
     try {
-        const {
-            rows
-        } = await client.query(
-            `
-                SELECT ordered_pizza.*
+        const { rows } = await client.query(
+          `
+                SELECT ordered_pizza.*, pizza_toppings.*, crust_options.*, sauce_options.*
                 FROM ordered_pizza
                 JOIN orders ON orders.order_id = ordered_pizza.order_id
                 JOIN users ON users.user_id = orders.user_id
+                JOIN pizza_toppings ON pizza_toppings.pizza_id = ordered_pizza.ordered_pizza_id
+                JOIN crust_options ON crust_options.crust_id = ordered_pizza.crust
+                JOIN sauce_options ON sauce_options.sauce_id = ordered_pizza.sauce
                 WHERE users.user_id = $1
-            `, [user_id]
-        )
+            `,
+          [user_id]
+        );
 
         return rows;
     } catch (error) {
@@ -107,6 +112,8 @@ async function getOrderedPizzasByOrderId(order_id) {
         throw error;
     }
 }
+
+
 
 
 
