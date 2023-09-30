@@ -1,5 +1,7 @@
 const { client } = require("./index")
 
+
+
 async function getOrderedPizzaByPizzaId(ordered_pizza_id) {
     try {
         const {
@@ -18,7 +20,7 @@ async function getOrderedPizzaByPizzaId(ordered_pizza_id) {
     }
 }
 
-async function getOrderedPizzaByUser(user_id) {
+async function getOrderedPizzasByUser(user_id) {
     try {
         const {
             rows
@@ -39,7 +41,23 @@ async function getOrderedPizzaByUser(user_id) {
     }
 }
 
+async function getOrderedPizzasByOrderId(order_id) {
+    try {
+        const { rows } = await client.query(
+            `
+                SELECT *
+                FROM ordered_pizza
+                WHERE order_id = $1
+            
+            `, [order_id]
+        )
 
+        return rows
+    } catch (error) {
+        console.error("Error getting ordered pizza by order id: ", error)
+        throw error;
+    }
+}
 
 
 
@@ -48,5 +66,6 @@ async function getOrderedPizzaByUser(user_id) {
 
 module.exports = {
     getOrderedPizzaByPizzaId,
-    getOrderedPizzaByUser,
+    getOrderedPizzasByUser,
+    getOrderedPizzasByOrderId
 }
