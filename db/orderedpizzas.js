@@ -1,6 +1,55 @@
 const { client } = require("./index")
 
+async function createOrderedPizza({ ...fields }) {
+    const dataArray = Object.values(fields);
+    let columnNames = Object.keys(fields).map((key) => `"${key}`).join(", ");
+    let valuePlaceHolders = Object.keys(fields).map((keys, index) => {
+        return `$${index + 1}`;
+    }).join(", ");
 
+    const newOrderSQL = `
+    INSERT INTO ordered_pizza
+    (${columnNames})
+    VALUES(${valuePlaceHolders})
+    RETURNING *;
+    `;
+
+    try {
+        const {
+            rows: [orderedPizza],
+        } = await client.query(newOrderSQL, dataArray);
+        return orderedPizza
+    } catch (error) {
+        console.error("Error creating ordered pizza: ", error)
+        throw error;
+    }
+}
+
+async function updateOrderedPizza(id, ...fields) {
+    let dataArray = Object.values(fields[0]);
+    const setString = Object.keys(fields[0]).map((key, index) => `"${key}"=$${index + 1}`).join(",");
+    const sql = `
+        UPDATE ordered_pizza
+        SET ${setString}
+        WHERE ordered_pizza_id=$${dataArray.length + 1}
+        RETURNING *;
+    `;
+    dataArray.push(id);
+
+    if (setString.length === 0) {
+        return;
+    }
+
+    try {
+        const {
+            rows: [orderedPizza],
+        } = await client.query(sql, dataArray);
+        return orderedPizza
+    } catch (error) {
+        console.error("Error updating ordered pizza: ", error)
+        throw error;
+    }
+}
 
 async function getOrderedPizzaByPizzaId(ordered_pizza_id) {
     try {
@@ -67,5 +116,7 @@ async function getOrderedPizzasByOrderId(order_id) {
 module.exports = {
     getOrderedPizzaByPizzaId,
     getOrderedPizzasByUser,
-    getOrderedPizzasByOrderId
+    getOrderedPizzasByOrderId,
+    createOrderedPizza,
+    updateOrderedPizza,
 }
