@@ -115,9 +115,11 @@ async function getOrderByUserId(userId) {
   }
 }
 
-async function attachPizzaToOrder(orderId, pizzaDetails) {
+async function attachPizzaToOrder({ order_id, pizza_price, quantity, size}) {
   try {
-    const { pizza_price, quantity, size } = pizzaDetails;
+    
+
+    
 
     const {
       rows: [pizza],
@@ -125,7 +127,7 @@ async function attachPizzaToOrder(orderId, pizzaDetails) {
       INSERT INTO ordered_pizza (order_id, pizza_price, quantity, size)
       VALUES ($1, $2, $3, $4)
       RETURNING *;
-    `, [orderId, pizza_price, quantity, size]);
+    `, [order_id, pizza_price, quantity, size]);
 
     return pizza
   } catch (error) {

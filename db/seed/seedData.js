@@ -285,11 +285,11 @@ async function createInitialPizzaToppings() {
       {
         topping_id: 2,
         pizza_id: 4,
-      }
+      },
       {
         topping_id: 7,
         pizza_id: 5,
-      }
+      },
     ];
 
     await Promise.all(pizzaToppingsToCreate.map(attachToppingToOrderedPizza));
@@ -308,7 +308,7 @@ async function populateDB() {
     await createInitialCrusts();
     await createInitialSauces();
     await createInitialOrderedPizzas();
-    await createInitialCategories();
+    await createInitialPizzaToppings();
   } catch (error) {
     console.log("Error during populateDB: ", error);
     throw error;

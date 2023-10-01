@@ -5,12 +5,13 @@ async function dropTables() {
     console.log("Starting to drop tables...");
 
     await client.query(`
+        
         DROP TABLE IF EXISTS pizza_toppings;
         DROP TABLE IF EXISTS ordered_pizza;
         DROP TABLE IF EXISTS crust_options;
         DROP TABLE IF EXISTS sauce_options;
         DROP TABLE IF EXISTS topping_options;
-        DROP TABLE IF EXISTS orders;
+        DROP TABLE IF EXISTS orders CASCADE;
         DROP TABLE IF EXISTS users;
         
         `);
@@ -93,7 +94,7 @@ async function createTables() {
                 quantity INTEGER,
                 size varchar(255),
                 crust INTEGER REFERENCES crust_options(crust_id),
-                sauce INTEGER REFERENCES sauce_options(sauce_id),
+                sauce INTEGER REFERENCES sauce_options(sauce_id)
                 
             );
         `);
