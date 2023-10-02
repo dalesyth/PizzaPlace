@@ -45,12 +45,12 @@ async function updateOrder(id, ...fields) {
 
   try {
     const {
-      rows: [order]
+      rows: [order],
     } = await client.query(sql, dataArray);
-    return order
+    return order;
   } catch (error) {
-    console.error("Error updating order: ", error)
-    throw error
+    console.error("Error updating order: ", error);
+    throw error;
   }
 }
 
@@ -115,30 +115,29 @@ async function getOrderByUserId(userId) {
   }
 }
 
-async function attachPizzaToOrder({ order_id, pizza_price, quantity, size, crust, sauce}) {
-  console.log(`order_id: ${order_id}`)
-  console.log(`pizza_price: ${pizza_price}`);
-  console.log(`order_id: ${order_id}`);
-  console.log(`order_id: ${order_id}`);
-  console.log(`order_id: ${order_id}`);
-  console.log(`order_id: ${order_id}`);
-
+async function attachPizzaToOrder({
+  order_id,
+  pizza_price,
+  quantity,
+  size,
+  crust,
+  sauce,
+}) {
   try {
-    
-
-    
-
     const {
       rows: [pizza],
-    } = await client.query(`
+    } = await client.query(
+      `
       INSERT INTO ordered_pizza (order_id, pizza_price, quantity, size, crust, sauce)
       VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING *;
-    `, [order_id, pizza_price, quantity, size, crust, sauce]);
+    `,
+      [order_id, pizza_price, quantity, size, crust, sauce]
+    );
 
-    return pizza
+    return pizza;
   } catch (error) {
-    console.error("Error attaching pizza to order: ", error)
+    console.error("Error attaching pizza to order: ", error);
     throw error;
   }
 }
