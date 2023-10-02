@@ -134,13 +134,18 @@ async function deleteOrderedPizza(ordered_pizza_id) {
       [ordered_pizza_id]
     );
 
-    await client.query(
+    const {
+      rows: [deletedPizza],
+    } = await client.query(
       `
             DELETE FROM ordered_pizza
             WHERE ordered_pizza_id = $1
+            RETURNING *
             `,
       [ordered_pizza_id]
     );
+    
+    return deletedPizza;
   } catch (error) {
     console.error("Error deleting ordered pizza: ", error);
     throw error;

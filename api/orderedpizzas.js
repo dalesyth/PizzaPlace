@@ -99,6 +99,7 @@ orderedPizzaRouter.delete("/:pizzaId", async (req, res, next) => {
   try {
     const deletedPizza = await deleteOrderedPizza(pizzaId);
 
+
     if (!deletedPizza) {
       res.status(404).send("Unable to delete the pizza");
     } else {
