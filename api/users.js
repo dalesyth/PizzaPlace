@@ -128,8 +128,10 @@ usersRouter.get("/:userId", async (req, res, next) => {
     const user = await getUserByUserId(userId);
     if (!user) {
       res.status(404).send("User not found")
+    } else {
+      res.status(200).send(user)
     }
-    res.status(200).send(user);
+    
   } catch ({ name, message }) {
     console.error({ name, message });
     next({ name, message });

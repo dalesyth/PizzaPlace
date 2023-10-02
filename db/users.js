@@ -123,6 +123,7 @@ async function getUserByEmail(email) {
 }
 
 async function getUserByUserId(userId) {
+  
   try {
     const {
       rows: [user],
