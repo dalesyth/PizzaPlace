@@ -163,7 +163,7 @@ async function deleteOrder(orderId) {
       
       `,
       [orderId]
-    )
+    );
 
     await client.query(
       `
@@ -174,7 +174,9 @@ async function deleteOrder(orderId) {
       [orderId]
     );
 
-    const { rows: [deletedOrder], } = await client.query(
+    const {
+      rows: [deletedOrder],
+    } = await client.query(
       `
             DELETE FROM orders
             WHERE order_id=$1
@@ -182,7 +184,7 @@ async function deleteOrder(orderId) {
             `,
       [orderId]
     );
-    console.log(`deletedOrder from deleteOrder: ${deletedOrder}`)
+    console.log(`deletedOrder from deleteOrder: ${deletedOrder}`);
     return deletedOrder;
   } catch (error) {
     console.error("Error deleting order: ", error);

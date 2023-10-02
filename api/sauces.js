@@ -43,7 +43,7 @@ saucesRouter.get("/:sauceId", async (req, res, next) => {
   try {
     const sauce = await getSauceById(sauceId);
 
-    if (!sauce || sauce.length === 0) {
+    if (!sauce) {
       res.status(404).send("Sauce not found");
     } else {
       res.status(200).send(sauce);
@@ -58,7 +58,7 @@ saucesRouter.get("/:sauceId", async (req, res, next) => {
 saucesRouter.get("/title/:title", async (req, res, next) => {
   const { title } = req.params;
   try {
-    const sauce = getSauceByTitle(title);
+    const sauce = await getSauceByTitle(title);
 
     if (!sauce || sauce.length === 0) {
       res.status(404).send("Sauce not found");
