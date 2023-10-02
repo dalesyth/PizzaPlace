@@ -120,11 +120,7 @@ toppingsRouter.patch("/:pizzaId/addTopping", async (req, res, next) => {
   try {
     const topping = await attachToppingToOrderedPizza({ toppingId, pizzaId });
 
-    // if (topping) {
-    //   res.status(200).send(topping);
-    // } else {
-    //   res.status(404).send("Failed to add topping to pizza");
-    // }
+   
 
     if (!topping || topping.length === 0) {
       res.status(404).send("Failed to add topping to pizza")
@@ -144,10 +140,12 @@ toppingsRouter.patch("/:pizzaId/removeTopping", async (req, res, next) => {
   try {
     const topping = await removeToppingFromOrderedPizza({ toppingId, pizzaId });
 
-    if (topping) {
-      res.status(200).send("Topping removed from pizza");
+   
+
+    if (!topping || topping.length === 0) {
+      res.status(404).send("Failed to remove topping from pizza")
     } else {
-      res.status(404).send("Failed to remove topping from pizza");
+      res.status(200).send(topping)
     }
   } catch ({ name, message }) {
     next({ name, message });

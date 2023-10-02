@@ -145,18 +145,20 @@ async function attachToppingToOrderedPizza({ toppingId, pizzaId }) {
   }
 }
 
-async function removeToppingFromOrderedPizza({ topping_id, ordered_pizza_id }) {
+async function removeToppingFromOrderedPizza({ toppingId, pizzaId }) {
   try {
-    const { rows } = await client.query(
+    const {
+      rows: [topping],
+    } = await client.query(
       `
             DELETE FROM pizza_toppings
             WHERE topping_id=$1 AND pizza_id=$2
             RETURNING *;
             
             `,
-      [topping_id, ordered_pizza_id]
+      [toppingId, pizzaId]
     );
-    return "Topping removed from pizza";
+    return topping;
   } catch (error) {
     console.error("Error removing topping from ordered pizza: ", error);
     throw error;
