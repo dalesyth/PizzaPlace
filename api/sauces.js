@@ -18,7 +18,6 @@ saucesRouter.use((req, res, next) => {
   next();
 });
 
-
 // GET /api/sauces
 
 saucesRouter.get("/", async (req, res, next) => {
@@ -97,7 +96,9 @@ saucesRouter.post("/", requireAdmin, async (req, res, next) => {
 
 saucesRouter.patch("/:orderedPizzaId/addSauce", async (req, res, next) => {
   const { orderedPizzaId } = req.params;
+
   const { sauceId } = req.body;
+
   try {
     const sauce = await addSauceToOrderedPizza({ sauceId, orderedPizzaId });
 
@@ -115,7 +116,6 @@ saucesRouter.patch("/:orderedPizzaId/addSauce", async (req, res, next) => {
 
 saucesRouter.patch("/:orderedPizzaId/removeSauce", async (req, res, next) => {
   const { orderedPizzaId } = req.params;
-  
 
   try {
     const sauce = await removeSauceFromOrderedPizza(orderedPizzaId);
@@ -175,4 +175,4 @@ saucesRouter.delete("/:sauceId", requireAdmin, async (req, res, next) => {
   }
 });
 
-module.exports = saucesRouter
+module.exports = saucesRouter;

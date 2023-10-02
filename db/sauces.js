@@ -106,17 +106,22 @@ async function getSauceByTitle(title) {
   }
 }
 
-async function addSauceToOrderedPizza({ sauceId, pizzaId }) {
+async function addSauceToOrderedPizza({ sauceId, orderedPizzaId }) {
+    console.log(`sauceId from db method: ${sauceId}`)
+    console.log(`pizzaId from db method: ${orderedPizzaId}`)
   try {
-    await client.query(
+    const {
+      rows: [sauce],
+    } = await client.query(
       `
             UPDATE ordered_pizza
             SET sauce = $1
             WHERE ordered_pizza_id = $2
+            RETURNING *
         `,
-      [sauceId, pizzaId]
+      [sauceId, orderedPizzaId]
     );
-    return "Sauce attached to ordered pizza successfully";
+    return sauce;
   } catch (error) {
     console.error("Error adding sauce to ordered pizza: ", error);
     throw error;
