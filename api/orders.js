@@ -6,6 +6,7 @@ const {
   createOrder,
   updateOrder,
   deleteOrder,
+  getAllOrders,
 } = require("../db/orders");
 const ordersRouter = express.Router();
 
@@ -15,13 +16,27 @@ ordersRouter.use((req, res, next) => {
   next();
 });
 
-// GET /api/orders
+// GET /api/orders/
 
 ordersRouter.get("/", async (req, res, next) => {
   try {
-    const orders = await getAllOpenOrders();
+    const orders = await getAllOrders();
 
-    
+    if (!orders) {
+      restart.status(404).send("No orders found");
+    } else {
+      res.status(200).send(orders);
+    }
+  } catch ({ name, message }) {
+    next({ name, message });
+  }
+});
+
+// GET /api/orders/open-orders
+
+ordersRouter.get("/open-orders", async (req, res, next) => {
+  try {
+    const orders = await getAllOpenOrders();
 
     if (!orders || orders.length === 0) {
       res.status(404).send("Unable to retrieve open orders");

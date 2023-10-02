@@ -54,6 +54,21 @@ async function updateOrder(id, ...fields) {
   }
 }
 
+async function getAllOrders() {
+  try {
+    const { rows } = await client.query(`
+    
+        SELECT *
+        FROM orders
+    
+    `);
+    return rows;
+  } catch (error) {
+    console.error("Error getting all orders: ", error);
+    throw error;
+  }
+}
+
 async function getAllOpenOrders() {
   try {
     const { rows } = await client.query(`
@@ -168,6 +183,7 @@ module.exports = {
   createOrder,
   updateOrder,
   getOrderByOrderId,
+  getAllOrders,
   getAllOpenOrders,
   getOrderByUserId,
   attachPizzaToOrder,
