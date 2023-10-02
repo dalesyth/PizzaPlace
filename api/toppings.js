@@ -120,10 +120,16 @@ toppingsRouter.patch("/:pizzaId/addTopping", async (req, res, next) => {
   try {
     const topping = await attachToppingToOrderedPizza({ toppingId, pizzaId });
 
-    if (topping) {
-      res.status(200).send("Topping added to pizza");
+    // if (topping) {
+    //   res.status(200).send(topping);
+    // } else {
+    //   res.status(404).send("Failed to add topping to pizza");
+    // }
+
+    if (!topping || topping.length === 0) {
+      res.status(404).send("Failed to add topping to pizza")
     } else {
-      res.status(404).send("Failed to add topping to pizza");
+      res.status(200).send(topping);
     }
   } catch ({ name, message }) {
     next({ name, message });

@@ -125,17 +125,20 @@ async function getToppingsByOrderedPizza(ordered_pizza_id) {
   }
 }
 
-async function attachToppingToOrderedPizza({ topping_id, pizza_id }) {
+async function attachToppingToOrderedPizza({ toppingId, pizzaId }) {
   try {
-    await client.query(
+    const {
+      rows: [topping],
+    } = await client.query(
       `
       INSERT INTO pizza_toppings (topping_id, pizza_id)
-      VALUES ($1, $2);
+      VALUES ($1, $2)
+      RETURNING *
       `,
-      [topping_id, pizza_id]
+      [toppingId, pizzaId]
     );
 
-    return "Topping attached to ordered pizza successfully";
+    return topping;
   } catch (error) {
     console.error("Error attaching topping to ordered pizza", error);
     throw error;
