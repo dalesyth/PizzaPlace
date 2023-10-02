@@ -169,6 +169,4 @@ crustsRouter.delete("/:crustId", requireAdmin, async (req, res, next) => {
   }
 });
 
-module.exports = {
-  crustsRouter,
-};
+module.exports = crustsRouter;

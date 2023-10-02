@@ -114,4 +114,4 @@ ordersRouter.delete("/:orderId", async (req, res, next) => {
   }
 });
 
-module.exports = { ordersRouter };
+module.exports = ordersRouter;

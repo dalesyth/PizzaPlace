@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { REACT_APP_JWT_SCRET, JWT_EXPIRATION_TIME } = process.env;
 const usersRouter = express.Router();
+
 const {
   getUserByEmail,
   createUser,
@@ -18,19 +19,13 @@ usersRouter.post("/register", async (req, res, next) => {
   const { first_name, last_name, email, password, phone } = req.body;
   try {
     if (password.length < 8) {
-      next({
-        message: "Password must be at least 8 characters",
-        name: "PasswordTooShortError",
-        error: "Password Too Short",
-      });
+      res.status(400).send("Password must be at least 8 characters")
     }
 
     const existingUser = await getUserByEmail(email);
 
     if (existingUser) {
-      next({
-        message: `User already exists with email: ${email}`,
-      });
+      res.status(400).send(`User already exists with email: ${email}`)
     }
 
     const newUser = await createUser({
@@ -70,11 +65,7 @@ usersRouter.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    next({
-      message: "Please provide both an email and password to log in",
-      name: "MissingCredentialsError",
-      error: "Please provide both an email and password to log in",
-    });
+    res.status(400).send("Please provide both an email and password to log in")
   }
 
   try {
@@ -130,11 +121,7 @@ usersRouter.get("/:userId", async (req, res, next) => {
   try {
     const user = await getUserByUserId(userId);
     if (!user) {
-      next({
-        message: "User not found",
-        name: "userNotFoundError",
-        error: "User not found",
-      });
+      res.status(404).send("User not found")
     }
     res.status(200).send(user);
   } catch ({ name, message }) {
@@ -150,11 +137,7 @@ usersRouter.get("/useremail/:email", async (req, res, next) => {
   try {
     const user = await getUserByEmail(email);
     if (!user) {
-      next({
-        message: "User not found",
-        name: "userNotFoundError",
-        error: "User not found",
-      });
+      res.status(404).send("User not found")
     }
     res.status(200).send(user);
   } catch ({ name, message }) {
@@ -181,6 +164,6 @@ usersRouter.delete("/:userId", requireAdmin, async (req, res, next) => {
   }
 });
 
-module.exports = {
-  usersRouter,
-};
+module.exports = usersRouter;
+
+

@@ -100,6 +100,4 @@ orderedPizzaRouter.delete("/:pizzaId", async (req, res, next) => {
     }
 })
 
-module.exports = {
-  orderedPizzaRouter,
-};
+module.exports = orderedPizzaRouter;

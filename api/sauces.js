@@ -172,6 +172,4 @@ saucesRouter.delete("/:sauceId", requireAdmin, async (req, res, next) => {
   }
 });
 
-module.exports = {
-  saucesRouter,
-};
+module.exports = saucesRouter

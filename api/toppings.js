@@ -183,6 +183,4 @@ toppingsRouter.delete("/:toppingId", requireAdmin, async (req, res, next) => {
   }
 });
 
-module.exports = {
-  toppingsRouter,
-};
+module.exports = toppingsRouter;
