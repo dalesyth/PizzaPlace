@@ -56,9 +56,7 @@ async function updateOrder(id, ...fields) {
 
 async function getAllOpenOrders() {
   try {
-    const {
-      rows: [orders],
-    } = await client.query(`
+    const { rows } = await client.query(`
         SELECT *
         FROM orders
         WHERE orders.order_complete = FALSE
@@ -66,7 +64,7 @@ async function getAllOpenOrders() {
         
         `);
 
-    return orders;
+    return rows;
   } catch (error) {
     console.error("Error getting all open orders: ", error);
     throw error;

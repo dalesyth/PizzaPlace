@@ -21,6 +21,8 @@ ordersRouter.get("/", async (req, res, next) => {
   try {
     const orders = await getAllOpenOrders();
 
+    
+
     if (!orders || orders.length === 0) {
       res.status(404).send("Unable to retrieve open orders");
     } else {
