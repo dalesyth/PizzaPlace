@@ -13,6 +13,12 @@ const {
 } = require("../db/users");
 const { requireUser, requireAdmin } = require("./utils");
 
+usersRouter.use((req, res, next) => {
+  console.log("A request is being made to /users");
+
+  next();
+})
+
 // POST /api/users/register
 
 usersRouter.post("/register", async (req, res, next) => {

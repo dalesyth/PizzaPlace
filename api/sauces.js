@@ -12,6 +12,12 @@ const {
   deleteSauce,
 } = require("../db/sauces");
 
+saucesRouter.use((req, res, next) => {
+  console.log("A request is being made to /sauces");
+
+  next();
+});
+
 
 // GET /api/sauces
 

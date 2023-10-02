@@ -9,6 +9,12 @@ const {
 } = require("../db/orders");
 const ordersRouter = express.Router();
 
+ordersRouter.use((req, res, next) => {
+  console.log("A request is being made to /orders");
+
+  next();
+});
+
 // GET /api/orders
 
 ordersRouter.get("/", async (req, res, next) => {

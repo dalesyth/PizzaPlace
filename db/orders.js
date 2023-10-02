@@ -115,7 +115,14 @@ async function getOrderByUserId(userId) {
   }
 }
 
-async function attachPizzaToOrder({ order_id, pizza_price, quantity, size}) {
+async function attachPizzaToOrder({ order_id, pizza_price, quantity, size, crust, sauce}) {
+  console.log(`order_id: ${order_id}`)
+  console.log(`pizza_price: ${pizza_price}`);
+  console.log(`order_id: ${order_id}`);
+  console.log(`order_id: ${order_id}`);
+  console.log(`order_id: ${order_id}`);
+  console.log(`order_id: ${order_id}`);
+
   try {
     
 
@@ -124,10 +131,10 @@ async function attachPizzaToOrder({ order_id, pizza_price, quantity, size}) {
     const {
       rows: [pizza],
     } = await client.query(`
-      INSERT INTO ordered_pizza (order_id, pizza_price, quantity, size)
-      VALUES ($1, $2, $3, $4)
+      INSERT INTO ordered_pizza (order_id, pizza_price, quantity, size, crust, sauce)
+      VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING *;
-    `, [order_id, pizza_price, quantity, size]);
+    `, [order_id, pizza_price, quantity, size, crust, sauce]);
 
     return pizza
   } catch (error) {

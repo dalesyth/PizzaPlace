@@ -4,7 +4,6 @@ const { createTopping, attachToppingToOrderedPizza } = require("../toppings");
 const { createCrust } = require("../crusts");
 const { createSauce } = require("../sauces");
 
-
 async function createInitialUsers() {
   console.log("Starting to create users...");
   try {

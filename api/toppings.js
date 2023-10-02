@@ -13,6 +13,12 @@ const {
 const toppingsRouter = express.Router();
 const { requireAdmin } = require("./utils")
 
+toppingsRouter.use((req, res, next) => {
+  console.log("A request is being made to /toppings");
+
+  next();
+});
+
 // GET /api/toppings
 
 toppingsRouter.get("/", async (req, res, next) => {

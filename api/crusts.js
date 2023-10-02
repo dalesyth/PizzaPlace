@@ -12,6 +12,12 @@ const {
   deleteCrust,
 } = require("../db/crusts");
 
+crustsRouter.use((req, res, next) => {
+  console.log("A request is being made to /crusts");
+
+  next();
+});
+
 // GET /api/crusts
 
 crustsRouter.get("/", async (req, res, next) => {

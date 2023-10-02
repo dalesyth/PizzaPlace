@@ -58,6 +58,7 @@ async function updateOrderedPizza(id, ...fields) {
 }
 
 async function getOrderedPizzaByPizzaId(ordered_pizza_id) {
+  console.log(`ordered_pizza_id from getOrderedPizzaByPizzaId: ${ordered_pizza_id}`)
   try {
     const {
       rows: [orderedPizza],
@@ -65,13 +66,14 @@ async function getOrderedPizzaByPizzaId(ordered_pizza_id) {
       `
                 SELECT ordered_pizza.*, pizza_toppings.*, crust_options.*, sauce_options.*
                 FROM ordered_pizza
-                JOIN pizza_toppings ON pizza_toppings.pizza_id = ordered_pizza.ordered_pizza_id
-                JOIN crust_options ON crust_options.crust_id = ordered_pizza.crust
-                JOIN sauce_options ON sauce_options.sauce_id = ordered_pizza.sauce
+                LEFT JOIN pizza_toppings ON pizza_toppings.pizza_id = ordered_pizza.ordered_pizza_id
+                LEFT JOIN crust_options ON crust_options.crust_id = ordered_pizza.crust
+                LEFT JOIN sauce_options ON sauce_options.sauce_id = ordered_pizza.sauce
                 WHERE ordered_pizza.ordered_pizza_id = $1
             `,
       [ordered_pizza_id]
     );
+    console.log(`orderedPizza: ${orderedPizza}`)
     return orderedPizza;
   } catch (error) {
     console.error("Error getting ordered pizza by pizza id: ", error);
