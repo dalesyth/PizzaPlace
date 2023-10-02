@@ -109,9 +109,7 @@ async function getOrderByOrderId(orderId) {
 
 async function getOrderByUserId(userId) {
   try {
-    const {
-      rows: [order],
-    } = await client.query(
+    const { rows } = await client.query(
       `
     SELECT *
     FROM orders
@@ -121,7 +119,7 @@ async function getOrderByUserId(userId) {
       [userId]
     );
 
-    return order;
+    return rows;
   } catch (error) {
     console.error("Error getting order by user ID: ", error);
     throw error;

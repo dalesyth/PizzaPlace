@@ -66,15 +66,15 @@ ordersRouter.get("/:orderId/order", async (req, res, next) => {
   }
 });
 
-// GET /api/orders/:userId/order
+// GET /api/orders/:userId/user
 
-ordersRouter.get("/:userId/order", async (req, res, next) => {
+ordersRouter.get("/:userId/user", async (req, res, next) => {
   const { userId } = req.params;
   try {
     const order = await getOrderByUserId(userId);
 
-    if (!order || order.length === 0) {
-      res.status(404).send("Unable to retrieve order");
+    if (!order) {
+      res.status(404).send("No orders found");
     } else {
       res.status(200).send(order);
     }
