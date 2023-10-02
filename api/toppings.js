@@ -42,7 +42,7 @@ toppingsRouter.get("/:toppingId", async (req, res, next) => {
   try {
     const topping = await getToppingById(toppingId);
 
-    if (!topping || topping.length === 0) {
+    if (!topping) {
       res.status(404).send("Topping not found");
     } else {
       res.status(200).send(topping);
@@ -60,7 +60,7 @@ toppingsRouter.get("/title/:title", async (req, res, next) => {
   try {
     const topping = await getToppingByTitle(title);
 
-    if (!topping || topping.length === 0) {
+    if (!topping) {
       res.status(404).send("Topping not found");
     } else {
       res.status(200).send(topping);
