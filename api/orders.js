@@ -128,7 +128,7 @@ ordersRouter.delete("/:orderId", async (req, res, next) => {
   try {
     const deletedOrder = await deleteOrder(orderId);
 
-    if (!deletedOrder || deletedOrder.length === 0) {
+    if (!deletedOrder) {
       res.status(404).send("Unable to delete order");
     } else {
       res.status(200).send("Order has been deleted");

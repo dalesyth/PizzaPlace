@@ -157,6 +157,16 @@ async function deleteOrder(orderId) {
   try {
     await client.query(
       `
+      DELETE FROM pizza_toppings
+      WHERE pizza_id IN 
+      (SELECT ordered_pizza_id FROM ordered_pizza WHERE order_id =$1)
+      
+      `,
+      [orderId]
+    )
+
+    await client.query(
+      `
         DELETE FROM ordered_pizza
         WHERE order_id=$1
         
@@ -164,13 +174,16 @@ async function deleteOrder(orderId) {
       [orderId]
     );
 
-    await client.query(
+    const { rows: [deletedOrder], } = await client.query(
       `
             DELETE FROM orders
             WHERE order_id=$1
+            RETURNING *
             `,
       [orderId]
     );
+    console.log(`deletedOrder from deleteOrder: ${deletedOrder}`)
+    return deletedOrder;
   } catch (error) {
     console.error("Error deleting order: ", error);
     throw error;
