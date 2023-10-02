@@ -55,11 +55,12 @@ ordersRouter.get("/:orderId/order", async (req, res, next) => {
   try {
     const order = await getOrderByOrderId(orderId);
 
-    if (!order || order.length === 0) {
-      res.status(404).send("Unable to retrieve order");
+    if (!order) {
+      res.status(404).send("Order not found");
     } else {
       res.status(200).send(order);
     }
+   
   } catch ({ name, message }) {
     next({ name, message });
   }

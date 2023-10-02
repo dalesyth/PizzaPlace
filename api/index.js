@@ -34,7 +34,7 @@ apiRouter.use("/ordered-pizza", orderedPizzaRouter);
 
 // ERROR HANDLER
 apiRouter.use((error, req, res, next) => {
-    res.status(500).json({
+    res.status(500).send({
         name: error.name,
         message: error.message,
     });
