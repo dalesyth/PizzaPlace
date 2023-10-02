@@ -86,10 +86,10 @@ ordersRouter.get("/:userId/user", async (req, res, next) => {
 // POST /api/orders/
 
 ordersRouter.post("/", async (req, res, next) => {
-  const { userId, orderDate, orderTotal } = req.body;
+  const { user_id, order_date, order_total } = req.body;
 
   try {
-    const order = await createOrder({ userId, orderDate, orderTotal });
+    const order = await createOrder({ user_id, order_date, order_total });
 
     if (!order || order.length === 0) {
       res.status(404).send("Unable to create order");
