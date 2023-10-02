@@ -123,23 +123,26 @@ async function addSauceToOrderedPizza({ sauceId, pizzaId }) {
   }
 }
 
-async function removeSauceFromOrderedPizza({ sauceId, pizzaId }) {
+async function removeSauceFromOrderedPizza(pizzaId) {
   try {
-    const { rows } = await client.query(
+    const {
+      rows: [sauce],
+    } = await client.query(
       `
-                DELETE FROM ordered_pizza
-                WHERE sauce = $1 AND ordered_pizza_id = $2
+                UPDATE ordered_pizza
+                SET sauce = NULL
+                WHERE ordered_pizza_id = $1
                 RETURNING *;
             
             `,
-      [sauceId, pizzaId]
+      [pizzaId]
     );
 
-    if (rows.length === 0) {
+    if (sauce.length === 0) {
       return null;
     }
 
-    return "Sauce removed from pizza";
+    return sauce;
   } catch (error) {
     console.error("Error removing sauce from ordered pizza: ", error);
     throw error;

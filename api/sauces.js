@@ -115,13 +115,10 @@ saucesRouter.patch("/:orderedPizzaId/addSauce", async (req, res, next) => {
 
 saucesRouter.patch("/:orderedPizzaId/removeSauce", async (req, res, next) => {
   const { orderedPizzaId } = req.params;
-  const { sauceId } = req.body;
+  
 
   try {
-    const sauce = await removeSauceFromOrderedPizza({
-      sauceId,
-      orderedPizzaId,
-    });
+    const sauce = await removeSauceFromOrderedPizza(orderedPizzaId);
 
     if (sauce) {
       res.status(200).send("Sauce removed from pizza");
