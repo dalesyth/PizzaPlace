@@ -66,10 +66,16 @@ async function createAdmin({
 
 async function getUser({ email, password }) {
   try {
-    const user = await getUserByEmail(email);
-
+    // const user = await getUserByEmail(email);
+    const { rows: [user], } = await client.query(`
+      SELECT *
+      FROM users
+      WHERE email = $1
+    
+    `, [email])
+    
     if (!user) {
-      console.log("Error getting user");
+      console.log("User not found");
       return null;
     }
 
