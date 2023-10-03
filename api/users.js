@@ -25,11 +25,11 @@ usersRouter.post("/register", async (req, res, next) => {
   const { first_name, last_name, email, password, phone } = req.body;
   try {
     if (!password) {
-      res.status(400).send("Please enter a password")
+      res.status(400).send("Please enter a password");
     }
 
     if (!email) {
-      res.status(400).send("Please enter an email")
+      res.status(400).send("Please enter an email");
     }
 
     if (password.length < 8) {
@@ -84,7 +84,6 @@ usersRouter.post("/login", async (req, res, next) => {
 
   try {
     const user = await getUser({ email, password });
-    
 
     if (user) {
       const token = jwt.sign({ id: user.id, email }, REACT_APP_JWT_SECRET);
