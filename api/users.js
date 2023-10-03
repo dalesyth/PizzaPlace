@@ -1,7 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const { REACT_APP_JWT_SCRET, JWT_EXPIRATION_TIME } = process.env;
+const { REACT_APP_JWT_SECRET, JWT_EXPIRATION_TIME } = process.env;
 const usersRouter = express.Router();
 
 const {
@@ -17,7 +17,7 @@ usersRouter.use((req, res, next) => {
   console.log("A request is being made to /users");
 
   next();
-})
+});
 
 // POST /api/users/register
 
@@ -25,13 +25,13 @@ usersRouter.post("/register", async (req, res, next) => {
   const { first_name, last_name, email, password, phone } = req.body;
   try {
     if (password.length < 8) {
-      res.status(400).send("Password must be at least 8 characters")
+      res.status(400).send("Password must be at least 8 characters");
     }
 
     const existingUser = await getUserByEmail(email);
 
     if (existingUser) {
-      res.status(400).send(`User already exists with email: ${email}`)
+      res.status(400).send(`User already exists with email: ${email}`);
     }
 
     const newUser = await createUser({
@@ -51,7 +51,7 @@ usersRouter.post("/register", async (req, res, next) => {
         email: newUser.email,
         exp: expirationTime,
       },
-      REACT_APP_JWT_SCRET
+      REACT_APP_JWT_SECRET
     );
 
     res.status(201).send({
@@ -71,7 +71,7 @@ usersRouter.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    res.status(400).send("Please provide both an email and password to log in")
+    res.status(400).send("Please provide both an email and password to log in");
   }
 
   try {
@@ -127,11 +127,10 @@ usersRouter.get("/:userId", async (req, res, next) => {
   try {
     const user = await getUserByUserId(userId);
     if (!user) {
-      res.status(404).send("User not found")
+      res.status(404).send("User not found");
     } else {
-      res.status(200).send(user)
+      res.status(200).send(user);
     }
-    
   } catch ({ name, message }) {
     console.error({ name, message });
     next({ name, message });
@@ -145,7 +144,7 @@ usersRouter.get("/useremail/:email", async (req, res, next) => {
   try {
     const user = await getUserByEmail(email);
     if (!user) {
-      res.status(404).send("User not found")
+      res.status(404).send("User not found");
     }
     res.status(200).send(user);
   } catch ({ name, message }) {
@@ -173,5 +172,3 @@ usersRouter.delete("/:userId", requireAdmin, async (req, res, next) => {
 });
 
 module.exports = usersRouter;
-
-

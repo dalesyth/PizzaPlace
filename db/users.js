@@ -6,6 +6,7 @@ async function createUser({
   last_name,
   password,
   email,
+  phone,
   is_admin = false,
 }) {
   const SALT_COUNT = 10;
@@ -16,13 +17,13 @@ async function createUser({
       rows: [user],
     } = await client.query(
       `
-            INSERT INTO users (first_name, last_name, password, email, is_admin)
-            VALUES ($1, $2, $3, $4, $5)
+            INSERT INTO users (first_name, last_name, password, email, phone, is_admin)
+            VALUES ($1, $2, $3, $4, $5, $6)
             ON CONFLICT (email) DO NOTHING
             RETURNING *;
         
         `,
-      [first_name, last_name, hashedPassword, email, is_admin]
+      [first_name, last_name, hashedPassword, email, phone, is_admin]
     );
 
     return user;
@@ -66,7 +67,6 @@ async function createAdmin({
 async function getUser({ email, password }) {
   try {
     const user = await getUserByEmail(email);
-    
 
     if (!user) {
       console.log("Error getting user");
@@ -101,6 +101,7 @@ async function getAllUsers() {
 }
 
 async function getUserByEmail(email) {
+  console.log(`email from getUserByEmail: ${email}`);
   try {
     const {
       rows: [user],
@@ -114,16 +115,20 @@ async function getUserByEmail(email) {
       [email]
     );
 
+    if (!user) {
+      return null;
+    }
+
     delete user.password;
+    console.log(`user from getUserByEmail: ${user}`);
     return user;
   } catch (error) {
-    console.error("Error getting user by username: ", error);
+    console.error("Error getting user by email: ", error);
     throw error;
   }
 }
 
 async function getUserByUserId(userId) {
-  
   try {
     const {
       rows: [user],
