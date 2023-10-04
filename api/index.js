@@ -1,47 +1,80 @@
-const express = require('express');
-
+const express = require("express");
 const apiRouter = express.Router();
+const jwt = require("jsonwebtoken");
+const { getUserByUserId } = require("../db/users");
+const { REACT_APP_JWT_SECRET } = process.env;
 
-//GET /api/health
-apiRouter.get("/health", async (req, res) => {
-    res.send({ message: "All is well"});
+//JWT Authorization Middleware
+
+apiRouter.use(async (req, res, next) => {
+  const prefix = "Bearer ";
+  const auth = req.header("Authorization");
+  console.log(`auth: ${auth}`);
+
+  if (!auth) {
+    next();
+  } else if (auth.startsWith(prefix)) {
+    const token = auth.slice(prefix.length);
+    console.log(`token from auth: ${token}`);
+
+    try {
+      const { id } = jwt.verify(token, REACT_APP_JWT_SECRET);
+
+      console.log(`id from auth: ${id}`);
+
+      if (id) {
+        req.user = await getUserByUserId(id);
+        next();
+      }
+    } catch ({ name, message }) {
+      next({ name, message });
+    }
+  } else {
+    next({
+      name: "AuthorizationHeaderError",
+      message: `Authorization token must start with ${prefix}`,
+    });
+  }
+});
+
+apiRouter.use((req, res, next) => {
+  if (req.user) {
+    console.log("User is set:", req.user);
+  }
+
+  next();
 });
 
 // ROUTER: /api/users
-const usersRouter = require('./users');
+const usersRouter = require("./users");
 apiRouter.use("/users", usersRouter);
 
 // ROUTE: /api/orders
-const ordersRouter = require('./orders');
+const ordersRouter = require("./orders");
 apiRouter.use("/orders", ordersRouter);
 
 // ROUTE: /api/toppings
-const toppingsRouter = require('./toppings');
+const toppingsRouter = require("./toppings");
 apiRouter.use("/toppings", toppingsRouter);
 
 // ROUTE: /api/sauces
-const saucesRouter = require('./sauces');
+const saucesRouter = require("./sauces");
 apiRouter.use("/sauces", saucesRouter);
 
 // ROUTE: /api/crusts
-const crustsRouter = require('./crusts');
+const crustsRouter = require("./crusts");
 apiRouter.use("/crusts", crustsRouter);
 
 // ROUTE: /api/ordered-pizza
-const orderedPizzaRouter = require('./orderedpizzas');
+const orderedPizzaRouter = require("./orderedpizzas");
 apiRouter.use("/ordered-pizza", orderedPizzaRouter);
-
 
 // ERROR HANDLER
 apiRouter.use((error, req, res, next) => {
-    res.status(500).send({
-        name: error.name,
-        message: error.message,
-    });
+  res.status(500).send({
+    name: error.name,
+    message: error.message,
+  });
 });
 
-
-
-
 module.exports = apiRouter;
-

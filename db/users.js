@@ -85,6 +85,8 @@ async function getUser({ email, password }) {
     if (isValid) {
       delete user.password;
       return user;
+    } else {
+      return null;
     }
   } catch (error) {
     console.error("Error getting user: ", error);

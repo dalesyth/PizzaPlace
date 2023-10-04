@@ -77,17 +77,21 @@ usersRouter.post("/register", async (req, res, next) => {
 
 usersRouter.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
-
+  console.log("You've reached /login")
+  
   if (!email || !password) {
     res.status(400).send("Please provide both an email and password to log in");
   }
 
   try {
     const user = await getUser({ email, password });
+   
+    
 
     if (user) {
       const token = jwt.sign({ id: user.id, email }, REACT_APP_JWT_SECRET);
 
+      
       res.status(200).send({ message: "You are logged in!", token, user });
     } else {
       next({
@@ -106,6 +110,8 @@ usersRouter.post("/login", async (req, res, next) => {
 
 usersRouter.get("/me", requireUser, async (req, res, next) => {
   const user = req.user;
+  console.log(`req.body from /me: ${Object.values(req.body)}`)
+  console.log(`user from /me: ${user}`)
 
   try {
     res.send(user);
