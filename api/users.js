@@ -50,12 +50,14 @@ usersRouter.post("/register", async (req, res, next) => {
       phone,
     });
 
+
+
     const expirationTime =
       Math.floor(Date.now() / 1000) + parseInt(JWT_EXPIRATION_TIME);
 
     const token = jwt.sign(
       {
-        id: user.id,
+        id: user.user_id,
         email: user.email,
         exp: expirationTime,
       },
@@ -85,13 +87,14 @@ usersRouter.post("/login", async (req, res, next) => {
 
   try {
     const user = await getUser({ email, password });
+    console.log("user.user_id from /login: ", user.user_id)
 
     if (user) {
       const expirationTime =
         Math.floor(Date.now() / 1000) + parseInt(JWT_EXPIRATION_TIME);
 
       const token = jwt.sign(
-        { id: user.id, email, exp: expirationTime },
+        { id: user.user_id, email, exp: expirationTime },
         REACT_APP_JWT_SECRET
       );
 

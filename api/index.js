@@ -7,20 +7,19 @@ const { REACT_APP_JWT_SECRET } = process.env;
 //JWT Authorization Middleware
 
 apiRouter.use(async (req, res, next) => {
-  console.log("You have reached the JWT auth middleware")
+  console.log("You have reached the JWT auth middleware");
   const prefix = "Bearer ";
   const auth = req.header("Authorization");
   console.log(`auth: ${auth}`);
 
   if (!auth) {
-    console.log("!auth")
+    console.log("!auth");
     next();
   } else if (auth.startsWith(prefix)) {
     const token = auth.slice(prefix.length);
-    
 
     try {
-      console.log("You have reached the try/catch to verify the JWT")
+      console.log("You have reached the try/catch to verify the JWT");
       const { id } = jwt.verify(token, REACT_APP_JWT_SECRET);
 
       console.log(`id from auth: ${id}`);
@@ -41,8 +40,8 @@ apiRouter.use(async (req, res, next) => {
 });
 
 apiRouter.use((req, res, next) => {
-  console.log("You have reached middleware to check req.user")
-  console.log(`req.user from middleware: ${req.user}`)
+  console.log("You have reached middleware to check req.user");
+  console.log(`req.user from middleware: ${req.user}`);
   if (req.user) {
     console.log("User is set:", req.user);
   }
