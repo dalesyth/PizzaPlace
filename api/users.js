@@ -65,7 +65,7 @@ usersRouter.post("/register", async (req, res, next) => {
     res.status(201).send({
       message: "Thank you for registering",
       token,
-      email,
+      user,
     });
   } catch ({ name, message }) {
     console.error({ name, message });
@@ -85,10 +85,15 @@ usersRouter.post("/login", async (req, res, next) => {
 
   try {
     const user = await getUser({ email, password });
-    
 
     if (user) {
-      const token = jwt.sign({ id: user.id, email }, REACT_APP_JWT_SECRET);
+      const expirationTime =
+        Math.floor(Date.now() / 1000) + parseInt(JWT_EXPIRATION_TIME);
+
+      const token = jwt.sign(
+        { id: user.id, email, exp: expirationTime },
+        REACT_APP_JWT_SECRET
+      );
 
       res.status(200).send({ message: "You are logged in!", token, user });
     } else {
