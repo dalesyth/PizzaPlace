@@ -6,6 +6,7 @@ async function dropTables() {
 
     await client.query(`
         
+        DROP TABLE IF EXISTS ordered_sides;
         DROP TABLE IF EXISTS side_options;
         DROP TABLE IF EXISTS pizza_toppings;
         DROP TABLE IF EXISTS ordered_pizza;
@@ -121,7 +122,17 @@ async function createTables() {
               )
     `);
 
-    console.log("Side options table created")
+    console.log("Side options table created");
+
+    await client.query(`
+              CREATE TABLE ordered_sides (
+                ordered_side_id SERIAL PRIMARY KEY,
+                order_id INTEGER REFERENCES orders(order_id),
+                quantity NUMERIC
+              )
+    `);
+
+    console.log("Ordered sides table created")
   } catch (error) {
     console.error("Error creating tables");
     throw error;

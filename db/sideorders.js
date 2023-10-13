@@ -46,3 +46,57 @@ async function updateSide(id, ...fields) {
   }
 }
 
+async function getAllSides() {
+    try {
+        const { rows } = await client.query(`
+            SELECT *
+            FROM side_options
+        `);
+        return rows;
+    } catch (error) {
+        console.error("Error getting sides: ", error);
+        throw error;
+    }
+}
+
+async function getSideById(id) {
+    try {
+        const {
+            rows: [side]
+        } = await client.query(`
+            SELECT *
+            FROM side_options
+            WHERE side_option_id = $1
+        `, [id]);
+        return side;
+    } catch (error) {
+        console.error("Error getting side by id: ", error);
+        throw error;
+    }
+}
+
+async function getSideByTitle(title) {
+    try {
+        const {
+            rows: [side]
+        } = await client.query(`
+            SELECT *
+            FROM side_options
+            WHERE title = $1
+        
+        `, [title]);
+        return side;
+    } catch (error) {
+        console.error("Error getting side by title: ", error);
+        throw error;
+    }
+}
+
+async function addSideToOrder({ sideId, orderId }) {
+    try {
+        
+    } catch (error) {
+        console.error("Error adding side to order; ", error);
+        throw error
+    }
+}
