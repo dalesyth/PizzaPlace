@@ -299,6 +299,29 @@ async function createInitialPizzaToppings() {
   }
 }
 
+async function createInitialSideOrders() {
+  console.log("Starting to create side orders...");
+  try {
+    const sideOrdersToCreate = [
+      {
+        title: "Marinara Sauce",
+      },
+      {
+        title: "Alfredo Sauce",
+      },
+      {
+        title: "BBQ Sauce",
+      },
+    ];
+
+    await Promise.all(sideOrdersToCreate.map(createSideOrder));
+    console.log("Finished creating side orders!");
+  } catch (error) {
+    console.error("Error creating side orders: ", error);
+    throw error;
+  }
+}
+
 async function populateDB() {
   try {
     await createInitialUsers();
