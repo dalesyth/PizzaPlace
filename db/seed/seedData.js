@@ -3,6 +3,7 @@ const { createOrder, attachPizzaToOrder } = require("../orders");
 const { createTopping, attachToppingToOrderedPizza } = require("../toppings");
 const { createCrust } = require("../crusts");
 const { createSauce } = require("../sauces");
+const { createSide } = require("../sides");
 
 async function createInitialUsers() {
   console.log("Starting to create users...");
@@ -299,25 +300,52 @@ async function createInitialPizzaToppings() {
   }
 }
 
-async function createInitialSideOrders() {
-  console.log("Starting to create side orders...");
+async function createInitialSides() {
+  console.log("Starting to create sides...");
   try {
-    const sideOrdersToCreate = [
+    const sidesToCreate = [
       {
-        title: "Marinara Sauce",
+        title: "Bread Sticks",
+        price: 1.99,
       },
       {
-        title: "Alfredo Sauce",
+        title: "Cheese Sticks",
+        price: 3.99,
       },
       {
-        title: "BBQ Sauce",
+        title: "Cinnamon Sticks",
+        price: 1.99,
+      },
+      {
+        title: "6 Buffalo Wings",
+        price: 4.49,
+      },
+      {
+        title: "12 Buffalo Wings",
+        price: 7.99,
+      },
+      {
+        title: "Small Salad",
+        price: 3.99,
+      },
+      {
+        title: "Large Salad",
+        price: 4.99,
+      },
+      {
+        title: "2-Liter Drinks",
+        price: 1.85,
+      },
+      {
+        title: "20 Ounce Drinks",
+        price: 1.25,
       },
     ];
 
-    await Promise.all(sideOrdersToCreate.map(createSideOrder));
-    console.log("Finished creating side orders!");
+    await Promise.all(sidesToCreate.map(createSide));
+    console.log("Finished creating sides!");
   } catch (error) {
-    console.error("Error creating side orders: ", error);
+    console.error("Error creating sides: ", error);
     throw error;
   }
 }
@@ -331,6 +359,7 @@ async function populateDB() {
     await createInitialSauces();
     await createInitialOrderedPizzas();
     await createInitialPizzaToppings();
+    await createInitialSides();
   } catch (error) {
     console.log("Error during populateDB: ", error);
     throw error;
