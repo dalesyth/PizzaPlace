@@ -73,6 +73,10 @@ apiRouter.use("/crusts", crustsRouter);
 const orderedPizzaRouter = require("./orderedpizzas");
 apiRouter.use("/ordered-pizza", orderedPizzaRouter);
 
+// ROUTE: /api/sides
+const sidesRouter = require("./sides");
+apiRouter.use("/sides", sidesRouter);
+
 // ERROR HANDLER
 apiRouter.use((error, req, res, next) => {
   res.status(500).send({
