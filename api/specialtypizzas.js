@@ -17,6 +17,22 @@ specialtyPizzaRouter.use((req, res, next) => {
     next();
 });
 
+// GET /api/specialty-pizza
+
+specialtyPizzaRouter.get("/", async (req, res, next) => {
+  try {
+    const pizzas = await getAllSpecialtyPizzas();
+
+    if (!pizzas || pizzas.length === 0) {
+      res.status(404).send("Error getting all specialty pizzas");
+    } else {
+      res.status(200).send(pizzas);
+    }
+  } catch ({ name, message }) {
+    next({ name, message });
+  }
+});
+
 
 
 

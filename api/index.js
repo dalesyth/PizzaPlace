@@ -78,9 +78,8 @@ const sidesRouter = require("./sides");
 apiRouter.use("/sides", sidesRouter);
 
 // ROUTE: /api/specialty-pizza
-const specialtyPizzaRouter = require
-
-
+const specialtyPizzaRouter = require("./specialtypizzas");
+apiRouter.use("/specialty-pizza", specialtyPizzaRouter);
 
 // ERROR HANDLER
 apiRouter.use((error, req, res, next) => {
