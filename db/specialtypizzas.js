@@ -57,12 +57,31 @@ async function updateSpecialtyPizza(id, ...fields) {
   }
 }
 
+async function getAllSpecialtyPizzas() {
+    try {
+        const { rows } = await client.query(`
+            SELECT specialty_pizzas.*, pizza_toppings.*, crust_options.title, sauce_options.title, topping_options.title
+            FROM specialty_pizzas
+            LEFT JOIN ordered_pizza ON ordered_pizza.specialty_pizza_id = specialty_pizzas.pizza_id
+            LEFT JOIN pizza_toppings ON pizza_toppings.pizza_id = ordered_pizza.ordered_pizza_id
+            LEFT JOIN crust_options ON crust_options.crust_id = ordered_pizza.crust
+            LEFT JOIN sauce_options ON sauce_options.sauce_id = ordered_pizza.sauce
+            LEFT JOIN topping_options ON topping_options.topping_id = pizza_toppings.topping_id
+            WHERE ordered_pizza.is_specialty = TRUE
+
+        `);
+    } catch (error) {
+        console.error("Error getting all specialty pizzas: ", error)
+        throw error;
+    }
+}
+
 async function getSpecialtyPizzaByPizzaId(pizza_id) {
     try {
         const {
             rows: [specialtyPizza],
         } = await client.query(`
-            SELECT specialty_pizzas.*, pizza_toppings.*, crust_options.*, sauce_options.*
+            SELECT specialty_pizzas.*, pizza_toppings.*, crust_options.*, sauce_options.*, topping_options.*
             FROM specialty_pizzas
             LEFT JOIN ordered_pizza ON ordered_pizza.specialty_pizza_id = specialty_pizzas.pizza_id
             LEFT JOIN pizza_toppings ON pizza_toppings.pizza_id = ordered_pizza.ordered_pizza_id

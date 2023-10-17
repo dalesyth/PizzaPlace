@@ -64,7 +64,7 @@ async function getOrderedPizzaByPizzaId(ordered_pizza_id) {
       rows: [orderedPizza],
     } = await client.query(
       `
-                SELECT ordered_pizza.*, pizza_toppings.*, crust_options.*, sauce_options.*
+                SELECT ordered_pizza.*, pizza_toppings.*, crust_options.*, sauce_options.*, topping_options.*
                 FROM ordered_pizza
                 LEFT JOIN pizza_toppings ON pizza_toppings.pizza_id = ordered_pizza.ordered_pizza_id
                 LEFT JOIN crust_options ON crust_options.crust_id = ordered_pizza.crust
@@ -86,13 +86,14 @@ async function getOrderedPizzasByUser(user_id) {
   try {
     const { rows } = await client.query(
       `
-                SELECT ordered_pizza.*, pizza_toppings.*, crust_options.*, sauce_options.*
+                SELECT ordered_pizza.*, pizza_toppings.*, crust_options.*, sauce_options.*, topping_options.*
                 FROM ordered_pizza
                 JOIN orders ON orders.order_id = ordered_pizza.order_id
                 JOIN users ON users.user_id = orders.user_id
                 JOIN pizza_toppings ON pizza_toppings.pizza_id = ordered_pizza.ordered_pizza_id
                 JOIN crust_options ON crust_options.crust_id = ordered_pizza.crust
                 JOIN sauce_options ON sauce_options.sauce_id = ordered_pizza.sauce
+                LEFT JOIN topping_options ON topping_options.topping_id = pizza_toppings.topping_id
                 WHERE users.user_id = $1
             `,
       [user_id]
