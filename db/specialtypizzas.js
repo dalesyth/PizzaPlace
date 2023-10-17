@@ -117,7 +117,25 @@ async function getSpecialtyPizzaByUser(user_id) {
 
         
         `);
+
+        return rows;
     } catch (error) {
         console.error("Error getting specialty pizzas by user id: ", error)
+    }
+}
+
+async function getSpecialtyPizzaByOrderId(order_id) {
+    try {
+        const { rows } = await client.query(`
+            SELECT specialty_pizzas.*
+            FROM ordered_pizza
+            JOIN specialty_pizzas ON ordered_pizza.specialty_pizza_id = specialty_pizzas.pizza_id
+            WHERE ordered_pizza.order_id = $1
+        `, [order_id])
+
+        return rows;
+    } catch (error) {
+        console.error("Error getting specialty pizzas by order id: ", error)
+        throw error;
     }
 }
