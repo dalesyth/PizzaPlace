@@ -129,7 +129,7 @@ usersRouter.get("/me", requireUser, async (req, res, next) => {
 
 // GET /api/users
 
-usersRouter.get("/", requireAdmin, async (req, res, next) => {
+usersRouter.get("/", async (req, res, next) => {
   try {
     const allUsers = await getAllUsers();
     res.status(200).send(allUsers);
