@@ -96,7 +96,9 @@ async function createTables() {
                 quantity INTEGER,
                 size varchar(255),
                 crust INTEGER REFERENCES crust_options(crust_id),
-                sauce INTEGER REFERENCES sauce_options(sauce_id)
+                sauce INTEGER REFERENCES sauce_options(sauce_id),
+                is_specialty BOOLEAN DEFAULT FALSE,
+                specialty_pizza_id INTEGER REFERENCES specialty_pizzas(pizza_id)
                 
             );
         `);
