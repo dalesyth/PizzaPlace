@@ -69,6 +69,7 @@ async function getOrderedPizzaByPizzaId(ordered_pizza_id) {
                 LEFT JOIN pizza_toppings ON pizza_toppings.pizza_id = ordered_pizza.ordered_pizza_id
                 LEFT JOIN crust_options ON crust_options.crust_id = ordered_pizza.crust
                 LEFT JOIN sauce_options ON sauce_options.sauce_id = ordered_pizza.sauce
+                LEFT JOIN topping_options ON topping_options.topping_id = pizza_toppings.topping_id
                 WHERE ordered_pizza.ordered_pizza_id = $1
             `,
       [ordered_pizza_id]
