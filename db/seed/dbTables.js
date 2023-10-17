@@ -133,7 +133,17 @@ async function createTables() {
               )
     `);
 
-    console.log("Ordered sides table created")
+    console.log("Ordered sides table created");
+
+    await client.query(`
+              CREATE TABLE specialty_pizzas (
+                pizza_id SERIAL PRIMARY KEY,
+                title varchar(255) UNIQUE NOT NULL,
+                price NUMERIC NOT NULL
+              )
+    `);
+
+    console.log("Specialty Pizzas table created");
   } catch (error) {
     console.error("Error creating tables");
     throw error;
