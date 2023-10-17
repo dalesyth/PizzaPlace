@@ -139,3 +139,29 @@ async function getSpecialtyPizzaByOrderId(order_id) {
         throw error;
     }
 }
+
+async function deleteSpecialtyPizza(pizza_id) {
+    try {
+        const {
+            rows: [deletedPizza],
+        } = await client.query(`
+            DELETE FROM specialty_pizzas
+            WHERE pizza_id = $1
+        `, [pizza_id]);
+
+        return deletedPizza
+    } catch (error) {
+        console.error("Error deleting specialty pizza: ", error);
+        throw error;
+    }
+}
+
+module.exports = {
+    getAllSpecialtyPizzas,
+    getSpecialtyPizzaByOrderId,
+    getSpecialtyPizzaByPizzaId,
+    getSpecialtyPizzaByUser,
+    deleteSpecialtyPizza,
+    createSpecialtyPizza,
+    updateSpecialtyPizza,
+}
