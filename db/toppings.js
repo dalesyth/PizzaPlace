@@ -125,7 +125,9 @@ async function getToppingsByOrderedPizza(ordered_pizza_id) {
   }
 }
 
-async function attachToppingToOrderedPizza({ toppingId, pizzaId }) {
+async function attachToppingToOrderedPizza({ topping_id, pizza_id }) {
+  console.log("You have reached attachToppingToOrderedPizza db method")
+  console.log(`topping_id: ${topping_id}, pizza_id: ${pizza_id}`)
   try {
     const {
       rows: [topping],
@@ -135,7 +137,7 @@ async function attachToppingToOrderedPizza({ toppingId, pizzaId }) {
       VALUES ($1, $2)
       RETURNING *
       `,
-      [toppingId, pizzaId]
+      [topping_id, pizza_id]
     );
 
     return topping;
