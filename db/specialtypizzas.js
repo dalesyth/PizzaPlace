@@ -58,6 +58,7 @@ async function updateSpecialtyPizza(id, ...fields) {
 }
 
 async function getAllSpecialtyPizzas() {
+  console.log("You have reached getAllSpecialtyPizzas in /db")
   try {
     const { rows } = await client.query(`
             SELECT specialty_pizzas.*, pizza_toppings.*, crust_options.title, sauce_options.title, topping_options.title
@@ -70,6 +71,7 @@ async function getAllSpecialtyPizzas() {
             WHERE ordered_pizza.is_specialty = TRUE
 
         `);
+    return rows;
   } catch (error) {
     console.error("Error getting all specialty pizzas: ", error);
     throw error;

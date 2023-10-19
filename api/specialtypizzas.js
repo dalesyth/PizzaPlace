@@ -21,7 +21,7 @@ specialtyPizzaRouter.use((req, res, next) => {
 
 specialtyPizzaRouter.get("/", async (req, res, next) => {
   try {
-    res.send("You have reached the get all specialty pizzas endpoint")
+    
     const pizzas = await getAllSpecialtyPizzas();
 
     console.log("pizzas from api endpoint; ", pizzas)
