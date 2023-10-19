@@ -126,8 +126,7 @@ async function getToppingsByOrderedPizza(ordered_pizza_id) {
 }
 
 async function attachToppingToOrderedPizza({ topping_id, pizza_id }) {
-  console.log("You have reached attachToppingToOrderedPizza db method")
-  console.log(`topping_id: ${topping_id}, pizza_id: ${pizza_id}`)
+  
   try {
     const {
       rows: [topping],
