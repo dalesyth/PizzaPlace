@@ -133,17 +133,19 @@ async function attachPizzaToOrder({
   size,
   crust,
   sauce,
+  is_specialty,
+  specialty_pizza_id,
 }) {
   try {
     const {
       rows: [pizza],
     } = await client.query(
       `
-      INSERT INTO ordered_pizza (order_id, pizza_price, quantity, size, crust, sauce)
-      VALUES ($1, $2, $3, $4, $5, $6)
+      INSERT INTO ordered_pizza (order_id, pizza_price, quantity, size, crust, sauce, is_specialty, specialty_pizza_id)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING *;
     `,
-      [order_id, pizza_price, quantity, size, crust, sauce]
+      [order_id, pizza_price, quantity, size, crust, sauce, is_specialty, specialty_pizza_id]
     );
 
     return pizza;

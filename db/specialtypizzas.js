@@ -3,7 +3,7 @@ const { client } = require("./index");
 async function createSpecialtyPizza({ ...fields }) {
   const dataArray = Object.values(fields);
   let columnNames = Object.keys(fields)
-    .map((key) => `"${key}`)
+    .map((key) => `"${key}"`)
     .join(", ");
   let valuePlaceHolders = Object.keys(fields)
     .map((keys, index) => {
@@ -20,11 +20,11 @@ async function createSpecialtyPizza({ ...fields }) {
 
   try {
     const {
-      rows: [specialtyPizza],
+      rows: [orderedPizza],
     } = await client.query(newOrderSQL, dataArray);
-    return specialtyPizza;
+    return orderedPizza;
   } catch (error) {
-    console.error("Error creating specialty pizza: ", error);
+    console.error("Error creating ordered pizza: ", error);
     throw error;
   }
 }

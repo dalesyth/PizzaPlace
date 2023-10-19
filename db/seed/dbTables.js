@@ -6,6 +6,8 @@ async function dropTables() {
 
     await client.query(`
         
+        
+        DROP TABLE IF EXISTS specialty_pizzas CASCADE;
         DROP TABLE IF EXISTS ordered_sides;
         DROP TABLE IF EXISTS side_options;
         DROP TABLE IF EXISTS pizza_toppings;
@@ -89,6 +91,16 @@ async function createTables() {
     console.log("Crusts table created");
 
     await client.query(`
+              CREATE TABLE specialty_pizzas (
+                pizza_id SERIAL PRIMARY KEY,
+                title varchar(255) UNIQUE NOT NULL,
+                price NUMERIC NOT NULL
+              )
+    `);
+
+    console.log("Specialty Pizzas table created");
+
+    await client.query(`
             CREATE TABLE ordered_pizza (
                 ordered_pizza_id SERIAL PRIMARY KEY,
                 order_id INTEGER REFERENCES orders(order_id),
@@ -137,15 +149,7 @@ async function createTables() {
 
     console.log("Ordered sides table created");
 
-    await client.query(`
-              CREATE TABLE specialty_pizzas (
-                pizza_id SERIAL PRIMARY KEY,
-                title varchar(255) UNIQUE NOT NULL,
-                price NUMERIC NOT NULL
-              )
-    `);
-
-    console.log("Specialty Pizzas table created");
+    
   } catch (error) {
     console.error("Error creating tables");
     throw error;

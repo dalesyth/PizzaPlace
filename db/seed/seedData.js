@@ -4,6 +4,7 @@ const { createTopping, attachToppingToOrderedPizza } = require("../toppings");
 const { createCrust } = require("../crusts");
 const { createSauce } = require("../sauces");
 const { createSide } = require("../sides");
+const { createSpecialtyPizza } = require("../specialtypizzas")
 
 async function createInitialUsers() {
   console.log("Starting to create users...");
@@ -149,6 +150,10 @@ async function createInitialToppings() {
         title: "Red Onions",
         image_name: "red_onions.jpg",
       },
+      {
+        title: "Mozzarella Cheese",
+      
+      }
     ];
 
     await Promise.all(toppingsToCreate.map(createTopping));
@@ -208,49 +213,113 @@ async function createInitialSauces() {
   }
 }
 
+async function createSpecialtyPizzas() {
+  console.log("Starting to create Specialty Pizzas...")
+  try {
+    const specialtyPizzasToCreate = [
+      {
+        title: "Pepperoni Pizza",
+        price: 15.99,
+      },
+      {
+        title: "Cheese Pizza",
+        price: 13.99,
+      },
+      {
+        title: "Supreme Pizza",
+        price: 18.99,
+      },
+      {
+        title: "Four-Meat Pizza",
+        price: 18.99,
+      },
+      {
+        title: "Vegetarian Pizza",
+        price: 18.99,
+      },
+      {
+        title: "BBQ Pizza",
+        price: 18.99,
+      },
+      {
+        title: "Alfredo Pizza",
+        price: 15.99,
+      },
+    ];
+    await Promise.all(specialtyPizzasToCreate.map(createSpecialtyPizza))
+    console.log("Finished creating specialty pizzas!")
+  } catch (error) {
+    console.error("Error creating specialty pizzas: ", error)
+    throw error;
+  }
+}
+
 async function createInitialOrderedPizzas() {
   console.log("Starting to create Ordered Pizzas...");
   try {
     const orderedPizzasToCreate = [
       {
-        order_id: 1,
-        pizza_price: 18.75,
+        pizza_price: 15.99,
         quantity: 1,
         size: "large",
         crust: 1,
         sauce: 1,
+        is_specialty: true,
+        specialty_pizza_id: 1,
       },
       {
-        order_id: 2,
-        pizza_price: 22.35,
-        quantity: 2,
-        size: "small",
-        crust: 3,
-        sauce: 2,
-      },
-      {
-        order_id: 3,
-        pizza_price: 15.65,
+        pizza_price: 13.99,
         quantity: 1,
-        size: "medium",
-        crust: 2,
+        size: "large",
+        crust: 1,
+        sauce: 1,
+        is_specialty: true,
+        specialty_pizza_id: 2,
+      },
+      {
+        pizza_price: 18.99,
+        quantity: 1,
+        size: "large",
+        crust: 1,
+        sauce: 1,
+        is_specialty: true,
+        specialty_pizza_id: 3,
+      },
+      {
+        pizza_price: 18.99,
+        quantity: 1,
+        size: "large",
+        crust: 1,
+        sauce: 1,
+        is_specialty: true,
+        specialty_pizza_id: 4,
+      },
+      {
+        pizza_price: 18.99,
+        quantity: 1,
+        size: "large",
+        crust: 1,
+        sauce: 1,
+        is_specialty: true,
+        specialty_pizza_id: 5,
+      },
+      {
+        pizza_price: 18.99,
+        quantity: 1,
+        size: "large",
+        crust: 1,
         sauce: 3,
+        is_specialty: true,
+        specialty_pizza_id: 6,
       },
       {
-        order_id: 4,
-        pizza_price: 16.92,
+        pizza_price: 15.99,
         quantity: 1,
         size: "large",
         crust: 1,
-        sauce: 1,
-      },
-      {
-        order_id: 5,
-        pizza_price: 13.53,
-        quantity: 1,
-        size: "small",
-        crust: 2,
-        sauce: 1,
+        sauce: 2,
+        is_specialty: true,
+        specialty_pizza_id: 7,
       },
     ];
 
@@ -271,15 +340,31 @@ async function createInitialPizzaToppings() {
         pizza_id: 1,
       },
       {
-        topping_id: 7,
+        topping_id: 11,
         pizza_id: 2,
+      },
+      {
+        topping_id: 1,
+        pizza_id: 3,
+      },
+      {
+        topping_id: 4,
+        pizza_id: 3,
+      },
+      {
+        topping_id: 6,
+        pizza_id: 3,
+      },
+      {
+        topping_id: 7,
+        pizza_id: 3,
+      },
+      {
+        topping_id: 8,
+        pizza_id: 3,
       },
       {
         topping_id: 10,
-        pizza_id: 2,
-      },
-      {
-        topping_id: 5,
         pizza_id: 3,
       },
       {
@@ -287,8 +372,40 @@ async function createInitialPizzaToppings() {
         pizza_id: 4,
       },
       {
+        topping_id: 5,
+        pizza_id: 4,
+      },
+      {
+        topping_id: 6,
+        pizza_id: 4,
+      },
+      {
+        topping_id: 8,
+        pizza_id: 4,
+      },
+      {
+        topping_id: 1,
+        pizza_id: 5,
+      },
+      {
+        topping_id: 4,
+        pizza_id: 5,
+      },
+      {
         topping_id: 7,
         pizza_id: 5,
+      },
+      {
+        topping_id: 10,
+        pizza_id: 5,
+      },
+      {
+        topping_id: 5,
+        pizza_id: 6,
+      },
+      {
+        topping_id: 11,
+        pizza_id: 7,
       },
     ];
 
@@ -357,6 +474,7 @@ async function populateDB() {
     await createInitialToppings();
     await createInitialCrusts();
     await createInitialSauces();
+    await createSpecialtyPizzas();
     await createInitialOrderedPizzas();
     await createInitialPizzaToppings();
     await createInitialSides();
