@@ -58,19 +58,20 @@ async function updateSpecialtyPizza(id, ...fields) {
 }
 
 async function getAllSpecialtyPizzas() {
-  console.log("You have reached getAllSpecialtyPizzas in /db")
+  console.log("You have reached getAllSpecialtyPizzas in /db");
   try {
     const { rows } = await client.query(`
-            SELECT specialty_pizzas.*, pizza_toppings.*, crust_options.title, sauce_options.title, topping_options.title
-            FROM specialty_pizzas
-            LEFT JOIN ordered_pizza ON ordered_pizza.specialty_pizza_id = specialty_pizzas.pizza_id
-            LEFT JOIN pizza_toppings ON pizza_toppings.pizza_id = ordered_pizza.ordered_pizza_id
-            LEFT JOIN crust_options ON crust_options.crust_id = ordered_pizza.crust
-            LEFT JOIN sauce_options ON sauce_options.sauce_id = ordered_pizza.sauce
-            LEFT JOIN topping_options ON topping_options.topping_id = pizza_toppings.topping_id
-            WHERE ordered_pizza.is_specialty = TRUE
+        Select ordered_pizza.*, specialty_pizzas.title AS pizza_name, specialty_pizzas.price AS pizza_price, topping_options.title AS topping_name, sauce_options.title AS sauce_name, crust_options.title AS crust_name
+        FROM ordered_pizza
+        LEFT JOIN specialty_pizzas ON specialty_pizzas.pizza_id = ordered_pizza.specialty_pizza_id
+        LEFT JOIN pizza_toppings ON pizza_toppings.pizza_id = ordered_pizza.ordered_pizza_id
+        LEFT JOIN topping_options ON topping_options.topping_id = pizza_toppings.topping_id
+        LEFT JOIN sauce_options ON sauce_options.sauce_id = ordered_pizza.sauce
+        LEFT JOIN crust_options ON crust_options.crust_id = ordered_pizza.crust
+        WHERE ordered_pizza.is_specialty = TRUE
 
-        `);
+    
+    `);
     return rows;
   } catch (error) {
     console.error("Error getting all specialty pizzas: ", error);
@@ -104,8 +105,8 @@ async function getSpecialtyPizzaByPizzaId(pizza_id) {
 }
 
 async function getSpecialtyPizzaByUser(user_id) {
-    try {
-        const { rows } = await client.query(`
+  try {
+    const { rows } = await client.query(`
             SELECT specialty_pizzas.*, pizza_toppings.*, crust_options.*, sauce_options.*, topping_options.*
             FROM specialty_pizzas
             LEFT JOIN ordered_pizza ON ordered_pizza.specialty_pizza_id = specialty_pizzas.pizza_id
@@ -120,50 +121,56 @@ async function getSpecialtyPizzaByUser(user_id) {
         
         `);
 
-        return rows;
-    } catch (error) {
-        console.error("Error getting specialty pizzas by user id: ", error)
-    }
+    return rows;
+  } catch (error) {
+    console.error("Error getting specialty pizzas by user id: ", error);
+  }
 }
 
 async function getSpecialtyPizzaByOrderId(order_id) {
-    try {
-        const { rows } = await client.query(`
+  try {
+    const { rows } = await client.query(
+      `
             SELECT specialty_pizzas.*
             FROM ordered_pizza
             JOIN specialty_pizzas ON ordered_pizza.specialty_pizza_id = specialty_pizzas.pizza_id
             WHERE ordered_pizza.order_id = $1
-        `, [order_id])
+        `,
+      [order_id]
+    );
 
-        return rows;
-    } catch (error) {
-        console.error("Error getting specialty pizzas by order id: ", error)
-        throw error;
-    }
+    return rows;
+  } catch (error) {
+    console.error("Error getting specialty pizzas by order id: ", error);
+    throw error;
+  }
 }
 
 async function deleteSpecialtyPizza(pizza_id) {
-    try {
-        const {
-            rows: [deletedPizza],
-        } = await client.query(`
+  try {
+    const {
+      rows: [deletedPizza],
+    } = await client.query(
+      `
             DELETE FROM specialty_pizzas
             WHERE pizza_id = $1
-        `, [pizza_id]);
+        `,
+      [pizza_id]
+    );
 
-        return deletedPizza
-    } catch (error) {
-        console.error("Error deleting specialty pizza: ", error);
-        throw error;
-    }
+    return deletedPizza;
+  } catch (error) {
+    console.error("Error deleting specialty pizza: ", error);
+    throw error;
+  }
 }
 
 module.exports = {
-    getAllSpecialtyPizzas,
-    getSpecialtyPizzaByOrderId,
-    getSpecialtyPizzaByPizzaId,
-    getSpecialtyPizzaByUser,
-    deleteSpecialtyPizza,
-    createSpecialtyPizza,
-    updateSpecialtyPizza,
-}
+  getAllSpecialtyPizzas,
+  getSpecialtyPizzaByOrderId,
+  getSpecialtyPizzaByPizzaId,
+  getSpecialtyPizzaByUser,
+  deleteSpecialtyPizza,
+  createSpecialtyPizza,
+  updateSpecialtyPizza,
+};
