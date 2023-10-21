@@ -126,7 +126,6 @@ async function getToppingsByOrderedPizza(ordered_pizza_id) {
 }
 
 async function attachToppingToOrderedPizza({ topping_id, pizza_id }) {
-  
   try {
     const {
       rows: [topping],
@@ -142,6 +141,28 @@ async function attachToppingToOrderedPizza({ topping_id, pizza_id }) {
     return topping;
   } catch (error) {
     console.error("Error attaching topping to ordered pizza", error);
+    throw error;
+  }
+}
+
+async function getToppingsForSpecialtyPizza(pizzas) {
+  try {
+    const { rows: pizzaToppings } = await client.query(`
+      SELECT topping_options.title AS "toppingName"
+      FROM topping_options
+      JOIN pizza_toppings ON topping_options.topping_id = pizza_toppings.topping_id
+      JOIN ordered_pizza ON pizza_toppings.pizza_id = ordered_pizza.ordered_pizza_id
+      WHERE ordered_pizza.is_specialty = TRUE
+    `);
+
+    pizzas.forEach((pizza) => {
+      pizza.toppings = pizzaToppings.filter(
+        (topping) => topping.ordered_pizza_id === pizza.ordered_pizza_id
+      );
+    });
+
+    return pizzas;
+  } catch (error) {
     throw error;
   }
 }
@@ -204,4 +225,5 @@ module.exports = {
   attachToppingToOrderedPizza,
   removeToppingFromOrderedPizza,
   deleteTopping,
+  getToppingsForSpecialtyPizza,
 };
