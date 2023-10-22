@@ -58,36 +58,19 @@ async function updateSpecialtyPizza(id, ...fields) {
   }
 }
 
-// async function getAllSpecialtyPizzas() {
-//   console.log("You have reached getAllSpecialtyPizzas in /db");
-//   try {
-//     const { rows: pizzas } = await client.query(`
-//         Select ordered_pizza.*, specialty_pizzas.title AS pizza_name, specialty_pizzas.price AS pizza_price, topping_options.title AS topping_name, sauce_options.title AS sauce_name, crust_options.title AS crust_name
-//         FROM ordered_pizza
-//         LEFT JOIN specialty_pizzas ON specialty_pizzas.pizza_id = ordered_pizza.specialty_pizza_id
-//         LEFT JOIN pizza_toppings ON pizza_toppings.pizza_id = ordered_pizza.ordered_pizza_id
-//         LEFT JOIN topping_options ON topping_options.topping_id = pizza_toppings.topping_id
-//         LEFT JOIN sauce_options ON sauce_options.sauce_id = ordered_pizza.sauce
-//         LEFT JOIN crust_options ON crust_options.crust_id = ordered_pizza.crust
-//         WHERE ordered_pizza.is_specialty = TRUE
-
-//     `);
-//     return pizzas;
-//   } catch (error) {
-//     console.error("Error getting all specialty pizzas: ", error);
-//     throw error;
-//   }
-// }
-
 async function getAllSpecialtyPizzas() {
   try {
     const { rows: pizzas } = await client.query(
       `
         SELECT specialty_pizzas.title AS "pizzaName",
         specialty_pizzas.price AS "pizzaPrice",
-        specialty_pizzas.pizza_id AS "pizza_id"
+        specialty_pizzas.pizza_id AS "pizza_id",
+        crust_options.title AS "crustName",
+        sauce_options.title AS "sauceName"
         FROM specialty_pizzas
         JOIN ordered_pizza ON specialty_pizzas.pizza_id = ordered_pizza.specialty_pizza_id
+        JOIN crust_options ON crust_id = ordered_pizza.crust
+        JOIN sauce_options ON sauce_id = ordered_pizza.sauce
         
         
       `
