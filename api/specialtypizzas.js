@@ -24,7 +24,7 @@ specialtyPizzaRouter.get("/", async (req, res, next) => {
     
     const pizzas = await getAllSpecialtyPizzas();
 
-    console.log("pizzas from api endpoint; ", pizzas)
+    
 
     if (!pizzas || pizzas.length === 0) {
       res.status(404).send("Error getting all specialty pizzas");

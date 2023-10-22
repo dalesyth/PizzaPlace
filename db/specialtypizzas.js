@@ -84,7 +84,8 @@ async function getAllSpecialtyPizzas() {
     const { rows: pizzas } = await client.query(
       `
         SELECT specialty_pizzas.title AS "pizzaName",
-        specialty_pizzas.price AS "pizzaPrice"
+        specialty_pizzas.price AS "pizzaPrice",
+        specialty_pizzas.pizza_id AS "pizza_id"
         FROM specialty_pizzas
         JOIN ordered_pizza ON specialty_pizzas.pizza_id = ordered_pizza.specialty_pizza_id
         
