@@ -85,11 +85,9 @@ async function getAllSpecialtyPizzas() {
       `
         SELECT specialty_pizzas.title AS "pizzaName",
         specialty_pizzas.price AS "pizzaPrice"
-    
         FROM specialty_pizzas
         JOIN ordered_pizza ON specialty_pizzas.pizza_id = ordered_pizza.specialty_pizza_id
-        JOIN pizza_toppings ON pizza_toppings.pizza_id = ordered_pizza.ordered_pizza_id
-        JOIN topping_options ON topping_options.topping_id = pizza_toppings.topping_id
+        
         
       `
     );
