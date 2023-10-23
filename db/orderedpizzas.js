@@ -58,7 +58,9 @@ async function updateOrderedPizza(id, ...fields) {
 }
 
 async function getOrderedPizzaByPizzaId(ordered_pizza_id) {
-  console.log(`ordered_pizza_id from getOrderedPizzaByPizzaId: ${ordered_pizza_id}`)
+  console.log(
+    `ordered_pizza_id from getOrderedPizzaByPizzaId: ${ordered_pizza_id}`
+  );
   try {
     const {
       rows: [orderedPizza],
@@ -74,7 +76,7 @@ async function getOrderedPizzaByPizzaId(ordered_pizza_id) {
             `,
       [ordered_pizza_id]
     );
-    console.log(`orderedPizza: ${orderedPizza}`)
+    console.log(`orderedPizza: ${orderedPizza}`);
     return orderedPizza;
   } catch (error) {
     console.error("Error getting ordered pizza by pizza id: ", error);
@@ -146,7 +148,7 @@ async function deleteOrderedPizza(ordered_pizza_id) {
             `,
       [ordered_pizza_id]
     );
-    
+
     return deletedPizza;
   } catch (error) {
     console.error("Error deleting ordered pizza: ", error);

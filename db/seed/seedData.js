@@ -4,7 +4,7 @@ const { createTopping, attachToppingToOrderedPizza } = require("../toppings");
 const { createCrust } = require("../crusts");
 const { createSauce } = require("../sauces");
 const { createSide } = require("../sides");
-const { createSpecialtyPizza } = require("../specialtypizzas")
+const { createSpecialtyPizza } = require("../specialtypizzas");
 
 async function createInitialUsers() {
   console.log("Starting to create users...");
@@ -152,8 +152,7 @@ async function createInitialToppings() {
       },
       {
         title: "Mozzarella Cheese",
-      
-      }
+      },
     ];
 
     await Promise.all(toppingsToCreate.map(createTopping));
@@ -214,7 +213,7 @@ async function createInitialSauces() {
 }
 
 async function createSpecialtyPizzas() {
-  console.log("Starting to create Specialty Pizzas...")
+  console.log("Starting to create Specialty Pizzas...");
   try {
     const specialtyPizzasToCreate = [
       {
@@ -246,10 +245,10 @@ async function createSpecialtyPizzas() {
         price: 15.99,
       },
     ];
-    await Promise.all(specialtyPizzasToCreate.map(createSpecialtyPizza))
-    console.log("Finished creating specialty pizzas!")
+    await Promise.all(specialtyPizzasToCreate.map(createSpecialtyPizza));
+    console.log("Finished creating specialty pizzas!");
   } catch (error) {
-    console.error("Error creating specialty pizzas: ", error)
+    console.error("Error creating specialty pizzas: ", error);
     throw error;
   }
 }
@@ -341,6 +340,10 @@ async function createInitialPizzaToppings() {
       },
       {
         topping_id: 11,
+        pizza_id: 1,
+      },
+      {
+        topping_id: 11,
         pizza_id: 2,
       },
       {
@@ -368,6 +371,10 @@ async function createInitialPizzaToppings() {
         pizza_id: 3,
       },
       {
+        topping_id: 11,
+        pizza_id: 3,
+      },
+      {
         topping_id: 2,
         pizza_id: 4,
       },
@@ -381,6 +388,10 @@ async function createInitialPizzaToppings() {
       },
       {
         topping_id: 8,
+        pizza_id: 4,
+      },
+      {
+        topping_id: 11,
         pizza_id: 4,
       },
       {
@@ -400,7 +411,15 @@ async function createInitialPizzaToppings() {
         pizza_id: 5,
       },
       {
+        topping_id: 11,
+        pizza_id: 5,
+      },
+      {
         topping_id: 5,
+        pizza_id: 6,
+      },
+      {
+        topping_id: 11,
         pizza_id: 6,
       },
       {
