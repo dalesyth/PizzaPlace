@@ -18,11 +18,9 @@ orderedPizzaRouter.use((req, res, next) => {
 
 orderedPizzaRouter.get("/:ordered_pizza_id", async (req, res, next) => {
   const { ordered_pizza_id } = req.params;
-  
+
   try {
     const orderedPizza = await getOrderedPizzaByPizzaId(ordered_pizza_id);
-
-    
 
     if (!orderedPizza || orderedPizza.length === 0) {
       res.status(404).send("Unable to retrieve this ordered pizza");
@@ -98,7 +96,6 @@ orderedPizzaRouter.delete("/:pizzaId", async (req, res, next) => {
   const { pizzaId } = req.params;
   try {
     const deletedPizza = await deleteOrderedPizza(pizzaId);
-
 
     if (!deletedPizza) {
       res.status(404).send("Unable to delete the pizza");

@@ -3,7 +3,7 @@ const { client } = require("./index");
 async function createOrderedPizza({ ...fields }) {
   const dataArray = Object.values(fields);
   let columnNames = Object.keys(fields)
-    .map((key) => `"${key}`)
+    .map((key) => `"${key}"`)
     .join(", ");
   let valuePlaceHolders = Object.keys(fields)
     .map((keys, index) => {
