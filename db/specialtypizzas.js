@@ -66,7 +66,9 @@ async function getAllSpecialtyPizzas() {
         specialty_pizzas.price AS "pizzaPrice",
         specialty_pizzas.pizza_id AS "pizza_id",
         crust_options.title AS "crustName",
-        sauce_options.title AS "sauceName"
+        crust_options.crust_id AS "crustId",
+        sauce_options.title AS "sauceName",
+        sauce_options.sauce_id AS "sauceId"
         FROM specialty_pizzas
         JOIN ordered_pizza ON specialty_pizzas.pizza_id = ordered_pizza.specialty_pizza_id
         JOIN crust_options ON crust_id = ordered_pizza.crust

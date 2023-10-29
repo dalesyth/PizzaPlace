@@ -58,6 +58,7 @@ async function getAllToppings() {
             
             `
     );
+    
     return rows;
   } catch (error) {
     console.error("Error getting all toppings: ", error);
@@ -150,6 +151,7 @@ async function getToppingsForSpecialtyPizza(pizzas) {
     const { rows: pizzaToppings } = await client.query(`
       SELECT
         topping_options.title AS "toppingName",
+        topping_options.topping_id AS "toppingId",
         ordered_pizza.specialty_pizza_id AS "specialty_pizza_id",
         specialty_pizzas.pizza_id
       FROM
