@@ -62,8 +62,8 @@ async function getAllSpecialtyPizzas() {
   try {
     const { rows: pizzas } = await client.query(
       `
-        SELECT specialty_pizzas.title AS "pizzaName",
-        specialty_pizzas.price AS "pizzaPrice",
+        SELECT specialty_pizzas.title AS "title",
+        specialty_pizzas.price AS "price",
         specialty_pizzas.pizza_id AS "pizza_id",
         crust_options.title AS "crustName",
         crust_options.crust_id AS "crustId",
