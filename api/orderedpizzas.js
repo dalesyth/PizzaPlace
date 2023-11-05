@@ -2,6 +2,7 @@ const express = require("express");
 const {
   getOrderedPizzaByPizzaId,
   getOrderedPizzasByUser,
+  getOrderedPizzasByOrderId,
   createOrderedPizza,
   updateOrderedPizza,
   deleteOrderedPizza,
@@ -46,6 +47,21 @@ orderedPizzaRouter.get("/user/:userId", async (req, res, next) => {
     next({ name, message });
   }
 });
+
+orderedPizzaRouter.get("/ordered-pizza/:orderId", async (req, res, next) => {
+  const { orderId } = req.params;
+  try {
+    const orderedPizza = await getOrderedPizzasByOrderId(orderId);
+
+    if (!orderedPizza || orderedPizza.length === 0) {
+      res.status(404).send("Unable to retrieve ordered pizza");
+    } else {
+      res.status(200).send(orderedPizza);
+    }
+  } catch ({ name, message }) {
+    next({ name, message });
+  }
+})
 
 // POST /api/ordered-pizza
 
