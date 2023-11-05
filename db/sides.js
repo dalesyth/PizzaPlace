@@ -146,7 +146,7 @@ async function getSidesByOrder(orderId) {
   try {
     const { rows } = await client.query(
       `
-            SELECT side_options.*
+            SELECT side_options.title AS side_option_title
             FROM side_options
             JOIN ordered_sides ON ordered_sides.side_id = side_options.side_option_id
             JOIN orders ON orders.order_id = ordered_sides.order_id

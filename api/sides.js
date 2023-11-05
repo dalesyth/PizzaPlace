@@ -73,7 +73,7 @@ sidesRouter.get("/title/:title", async (req, res, next) => {
 // GET /api/sides/:orderId/ordered-sides
 // Gets all sides associated with an order
 
-sidesRouter.get("/:orderedId/ordered-sides", async (req, res, next) => {
+sidesRouter.get("/:orderId/ordered-sides", async (req, res, next) => {
   const { orderId } = req.params;
 
   try {
