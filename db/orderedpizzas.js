@@ -109,17 +109,36 @@ async function getOrderedPizzasByUser(user_id) {
 }
 
 async function getOrderedPizzasByOrderId(order_id) {
+  console.log("order_id from getOrderedPizzasByOrderId db method:", order_id);
   try {
     const { rows } = await client.query(
       `
-                SELECT *
-                FROM ordered_pizza
-                WHERE order_id = $1
+                SELECT
+                  ordered_pizza.pizza_price AS ordered_pizza_price,
+                  topping_options.title AS ordered_pizza_topping,
+                  crust_options.title AS ordered_pizza_crust,
+                  sauce_options.title AS ordered_pizza_sauce
+                FROM
+                  ordered_pizza
+                JOIN
+                  orders ON orders.order_id = ordered_pizza.order_id
+                JOIN
+                  users ON users.user_id = orders.user_id
+                JOIN
+                  pizza_toppings ON pizza_toppings.pizza_id = ordered_pizza.ordered_pizza_id
+                JOIN
+                  crust_options ON crust_options.crust_id = ordered_pizza.crust
+                JOIN
+                  sauce_options ON sauce_options.sauce_id = ordered_pizza.sauce
+                LEFT JOIN
+                  topping_options ON topping_options.topping_id = pizza_toppings.topping_id
+                WHERE
+                  ordered_pizza.order_id = $1;
             
             `,
       [order_id]
     );
-
+    console.log("rows from getOrderedPizzasByOrderId:", rows);
     return rows;
   } catch (error) {
     console.error("Error getting ordered pizza by order id: ", error);

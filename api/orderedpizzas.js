@@ -50,8 +50,11 @@ orderedPizzaRouter.get("/user/:userId", async (req, res, next) => {
 
 orderedPizzaRouter.get("/:orderId/order", async (req, res, next) => {
   const { orderId } = req.params;
+  console.log("orderId from api endpoint:", orderId)
   try {
     const orderedPizza = await getOrderedPizzasByOrderId(orderId);
+
+    console.log("orderedPizza from api endpoing:", orderedPizza)
 
     if (!orderedPizza || orderedPizza.length === 0) {
       res.status(404).send("Unable to retrieve ordered pizza");
@@ -61,7 +64,7 @@ orderedPizzaRouter.get("/:orderId/order", async (req, res, next) => {
   } catch ({ name, message }) {
     next({ name, message });
   }
-})
+});
 
 // POST /api/ordered-pizza
 
