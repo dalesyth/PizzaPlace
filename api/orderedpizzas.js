@@ -48,7 +48,7 @@ orderedPizzaRouter.get("/user/:userId", async (req, res, next) => {
   }
 });
 
-orderedPizzaRouter.get("/ordered-pizza/:orderId", async (req, res, next) => {
+orderedPizzaRouter.get("/:orderId/order", async (req, res, next) => {
   const { orderId } = req.params;
   try {
     const orderedPizza = await getOrderedPizzasByOrderId(orderId);
