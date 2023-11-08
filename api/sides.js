@@ -118,10 +118,11 @@ sidesRouter.post("/", requireAdmin, async (req, res, next) => {
 
 sidesRouter.patch("/:orderId/add-side", async (req, res, next) => {
   const { orderId } = req.params;
-  const { sideId } = req.body;
+  const { sideId, sidePrice } = req.body;
+  
 
   try {
-    const side = await attachSideToOrder({ sideId, orderId });
+    const side = await attachSideToOrder({ sideId, orderId, sidePrice });
 
     if (!side) {
       res.status(404).send("Failed to add side to order");

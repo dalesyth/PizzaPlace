@@ -57,7 +57,8 @@ orderedPizzaRouter.get("/:orderId/order", async (req, res, next) => {
     console.log("orderedPizza from api endpoing:", orderedPizza)
 
     if (!orderedPizza || orderedPizza.length === 0) {
-      res.status(404).send("Unable to retrieve ordered pizza");
+      
+      res.send(null);
     } else {
       res.status(200).send(orderedPizza);
     }

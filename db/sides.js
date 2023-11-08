@@ -101,17 +101,18 @@ async function getSideByTitle(title) {
   }
 }
 
-async function attachSideToOrder({ sideId, orderId }) {
+async function attachSideToOrder({ sideId, orderId, sidePrice }) {
+  console.log("sidePrice from attachSideToOrder:", sidePrice)
   try {
     const {
       rows: [side],
     } = await client.query(
       `
-            INSERT INTO ordered_sides (side_id, order_id)
-            VALUES ($1, $2)
+            INSERT INTO ordered_sides (side_id, order_id, side_price)
+            VALUES ($1, $2, $3)
             RETURNING *
         `,
-      [sideId, orderId]
+      [sideId, orderId, sidePrice]
     );
 
     return side;
@@ -146,11 +147,17 @@ async function getSidesByOrder(orderId) {
   try {
     const { rows } = await client.query(
       `
-            SELECT side_options.title AS side_option_title
-            FROM side_options
-            JOIN ordered_sides ON ordered_sides.side_id = side_options.side_option_id
-            JOIN orders ON orders.order_id = ordered_sides.order_id
-            WHERE orders.order_id = $1
+            SELECT 
+              side_options.title AS side_option_title,
+              side_options.price AS side_option_price
+            FROM 
+              side_options
+            JOIN 
+              ordered_sides ON ordered_sides.side_id = side_options.side_option_id
+            JOIN 
+              orders ON orders.order_id = ordered_sides.order_id
+            WHERE 
+              orders.order_id = $1
 
         `,
       [orderId]
