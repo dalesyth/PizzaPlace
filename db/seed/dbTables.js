@@ -143,6 +143,7 @@ async function createTables() {
                 ordered_side_id SERIAL PRIMARY KEY,
                 side_id INTEGER REFERENCES side_options(side_option_id),
                 order_id INTEGER REFERENCES orders(order_id),
+                side_price NUMERIC,
                 quantity NUMERIC
               )
     `);
