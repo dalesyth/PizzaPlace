@@ -33,6 +33,27 @@ async function createUser({
   }
 }
 
+async function guestUser({
+  firstName, lastName, email
+}) {
+  try {
+    const {
+      rows: [user],
+    } = await client.query(
+      `
+          INSERT INTO users (first_name, last_name, email)
+          VALUES ($1, $2, $3)
+          RETURNING *;
+      `,
+      [first_name, last_name, email]
+    );
+
+    return user;
+  } catch (error) {
+    console.error("Error creating guest user:", error)
+  }
+}
+
 async function createAdmin({
   first_name,
   last_name,
@@ -214,4 +235,5 @@ module.exports = {
   getUserByUserId,
   deleteUser,
   getUser,
+  guestUser,
 };
