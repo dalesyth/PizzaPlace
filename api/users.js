@@ -24,6 +24,9 @@ usersRouter.use((req, res, next) => {
 
 usersRouter.post("/guest", async (req, res, next) => {
   const { first_name, last_name, email } = req.body;
+  console.log("first_name from guest API endpoint:", first_name)
+  console.log("last_name from guest API endpoint:", last_name);
+  console.log("email from guest API endpoint:", email);
   try {
     if (!first_name) {
       res.status(400).send("Please enter a first name");
@@ -37,11 +40,13 @@ usersRouter.post("/guest", async (req, res, next) => {
       res.status(400).send("Please enter an email");
     }
 
-    const user = await createUser({
+    const user = await guestUser({
       first_name,
       last_name,
       email,
     });
+
+    console.log("user from guest api endpoint:", user)
 
     res.status(201).send(user);
   } catch ({ name, message }) {

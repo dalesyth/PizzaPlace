@@ -19,7 +19,7 @@ async function createUser({
       `
             INSERT INTO users (first_name, last_name, password, email, phone, is_admin)
             VALUES ($1, $2, $3, $4, $5, $6)
-            ON CONFLICT (email) DO NOTHING
+            
             RETURNING *;
         
         `,
@@ -33,9 +33,7 @@ async function createUser({
   }
 }
 
-async function guestUser({
-  firstName, lastName, email
-}) {
+async function guestUser({ first_name, last_name, email }) {
   try {
     const {
       rows: [user],
@@ -50,7 +48,7 @@ async function guestUser({
 
     return user;
   } catch (error) {
-    console.error("Error creating guest user:", error)
+    console.error("Error creating guest user:", error);
   }
 }
 
@@ -86,25 +84,32 @@ async function createAdmin({
 }
 
 async function getUser({ email, password }) {
-  console.log("You've reached thet getUser function in db")
-  console.log(`email from getUser: ${email}, password from getUser: ${password}`)
+  console.log("You've reached thet getUser function in db");
+  console.log(
+    `email from getUser: ${email}, password from getUser: ${password}`
+  );
   try {
     // const user = await getUserByEmail(email);
-    const { rows: [user], } = await client.query(`
+    const {
+      rows: [user],
+    } = await client.query(
+      `
       SELECT *
       FROM users
       WHERE email = $1
     
-    `, [email])
+    `,
+      [email]
+    );
 
-    console.log("User from getUser: ", user)
-    
+    console.log("User from getUser: ", user);
+
     if (!user) {
       console.log("User not found");
       return null;
     }
 
-    console.log("user.password from getUser: ", user.password)
+    console.log("user.password from getUser: ", user.password);
 
     const hashedPassword = user.password;
     const isValid = await bcrypt.compare(password, hashedPassword);
@@ -165,8 +170,8 @@ async function getUserByEmail(email) {
 }
 
 async function getUserByUserId(userId) {
-  console.log("You have reached getUserByUserId")
-  console.log(`userId from getUserByUserId: ${userId}`)
+  console.log("You have reached getUserByUserId");
+  console.log(`userId from getUserByUserId: ${userId}`);
   try {
     const {
       rows: [user],
