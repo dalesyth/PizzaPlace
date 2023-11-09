@@ -37,7 +37,7 @@ async function createTables() {
                 first_name varchar(255) NOT NULL,
                 last_name varchar(255) NOT NULL,
                 password varchar(255),
-                email varchar(255) UNIQUE NOT NULL,
+                email varchar(255) NOT NULL,
                 phone varchar(255),
                 is_admin BOOLEAN DEFAULT FALSE
             );
