@@ -10,6 +10,7 @@ const {
   getUser,
   getUserByUserId,
   deleteUser,
+  guestUser,
 } = require("../db/users");
 const { requireUser, requireAdmin } = require("./utils");
 
@@ -17,6 +18,35 @@ usersRouter.use((req, res, next) => {
   console.log("A request is being made to /users");
 
   next();
+});
+
+// POST /api/users/guest
+
+usersRouter.post("/guest", async (req, res, next) => {
+  const { first_name, last_name, email } = req.body;
+  try {
+    if (!first_name) {
+      res.status(400).send("Please enter a first name");
+    }
+
+    if (!last_name) {
+      res.status(400).send("Please enter a last name");
+    }
+
+    if (!email) {
+      res.status(400).send("Please enter an email");
+    }
+
+    const user = await createUser({
+      first_name,
+      last_name,
+      email,
+    });
+
+    res.status(201).send(user);
+  } catch ({ name, message }) {
+    next({ name, message });
+  }
 });
 
 // POST /api/users/register
@@ -49,8 +79,6 @@ usersRouter.post("/register", async (req, res, next) => {
       email,
       phone,
     });
-
-
 
     const expirationTime =
       Math.floor(Date.now() / 1000) + parseInt(JWT_EXPIRATION_TIME);
@@ -87,7 +115,7 @@ usersRouter.post("/login", async (req, res, next) => {
 
   try {
     const user = await getUser({ email, password });
-    console.log("user.user_id from /login: ", user.user_id)
+    console.log("user.user_id from /login: ", user.user_id);
 
     if (user) {
       const expirationTime =
