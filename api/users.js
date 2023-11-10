@@ -11,6 +11,7 @@ const {
   getUserByUserId,
   deleteUser,
   guestUser,
+  getAllUsers,
 } = require("../db/users");
 const { requireUser, requireAdmin } = require("./utils");
 
@@ -165,6 +166,7 @@ usersRouter.get("/me", requireUser, async (req, res, next) => {
 usersRouter.get("/", async (req, res, next) => {
   try {
     const allUsers = await getAllUsers();
+    console.log("allUsers from api endpoint:", allUsers)
     res.status(200).send(allUsers);
   } catch ({ name, message }) {
     console.error({ name, message });
