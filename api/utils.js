@@ -11,8 +11,8 @@ function requireUser(req, res, next) {
 }
 
 function requireAdmin(req, res, next) {
-
-    console.log("user.is_admin from requireAdmin:", user.is_admin)
+    console.log("You have reached requireAdmin from utils")
+    console.log("req.user.is_admin from requireAdmin:", req.user.is_admin)
     
     if (!req.user.is_admin) {
         res.status(403).send({

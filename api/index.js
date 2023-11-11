@@ -41,7 +41,8 @@ apiRouter.use(async (req, res, next) => {
 
 apiRouter.use((req, res, next) => {
   console.log("You have reached middleware to check req.user");
-  console.log(`req.user from middleware: ${req.user}`);
+  
+  console.log("req.user from middleware:", req.user);
   if (req.user) {
     console.log("User is set:", req.user);
   }

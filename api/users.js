@@ -210,7 +210,7 @@ usersRouter.get("/useremail/:email", async (req, res, next) => {
 
 // DELETE /api/users/:userId/delete
 
-usersRouter.delete("/delete/:userId", async (req, res, next) => {
+usersRouter.delete("/delete/:userId", requireAdmin, async (req, res, next) => {
   const { userId } = req.params;
   console.log("you have reached the delete user api endpoint")
   try {
