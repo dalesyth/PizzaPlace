@@ -145,7 +145,16 @@ async function attachPizzaToOrder({
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING *;
     `,
-      [order_id, pizza_price, quantity, size, crust, sauce, is_specialty, specialty_pizza_id]
+      [
+        order_id,
+        pizza_price,
+        quantity,
+        size,
+        crust,
+        sauce,
+        is_specialty,
+        specialty_pizza_id,
+      ]
     );
 
     return pizza;
@@ -156,6 +165,8 @@ async function attachPizzaToOrder({
 }
 
 async function deleteOrder(orderId) {
+  console.log("You have reached deleteOrder db method");
+  console.log("orderId from deleteOrder:", orderId);
   try {
     await client.query(
       `
@@ -173,6 +184,14 @@ async function deleteOrder(orderId) {
         WHERE order_id=$1
         
         `,
+      [orderId]
+    );
+
+    await client.query(
+      `
+        DELETE FROM ordered_sides
+        WHERE order_id=$1
+      `,
       [orderId]
     );
 

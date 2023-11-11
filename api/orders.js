@@ -122,9 +122,9 @@ ordersRouter.patch("/:orderId", async (req, res, next) => {
   }
 });
 
-// DELETE /api/orders/:orderId
+// DELETE /api/orders/delete/:orderId
 
-ordersRouter.delete("/:orderId", async (req, res, next) => {
+ordersRouter.delete("/delete/:orderId", async (req, res, next) => {
   const { orderId } = req.params;
 
   try {
