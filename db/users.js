@@ -198,7 +198,7 @@ async function deleteUser(userId) {
       `
             DELETE FROM ordered_pizza
             WHERE order_id IN (
-                SELECT id
+                SELECT order_id
                 FROM orders
                 WHERE user_id=$1
             )  

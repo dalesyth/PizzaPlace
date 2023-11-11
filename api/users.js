@@ -208,12 +208,15 @@ usersRouter.get("/useremail/:email", async (req, res, next) => {
   }
 });
 
-// DELETE /api/user/:userId
+// DELETE /api/users/:userId/delete
 
-usersRouter.delete("/:userId", requireAdmin, async (req, res, next) => {
+usersRouter.delete("/delete/:userId", async (req, res, next) => {
   const { userId } = req.params;
+  console.log("you have reached the delete user api endpoint")
   try {
     const deletedUser = await deleteUser(userId);
+
+    console.log("deletedUser from delete api enpoint:", deletedUser)
 
     if (deletedUser) {
       res.status(200).send("User has been deleted");
