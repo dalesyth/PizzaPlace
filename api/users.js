@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { REACT_APP_JWT_SECRET, JWT_EXPIRATION_TIME } = process.env;
 const usersRouter = express.Router();
+const cookieParser = require('cookie-parser')
 
 const {
   getUserByEmail,
@@ -20,6 +21,8 @@ usersRouter.use((req, res, next) => {
 
   next();
 });
+
+usersRouter.use(cookieParser());
 
 // POST /api/users/guest
 
@@ -56,6 +59,8 @@ usersRouter.post("/guest", async (req, res, next) => {
 });
 
 // POST /api/users/register
+
+
 
 usersRouter.post("/register", async (req, res, next) => {
   const { first_name, last_name, email, password, phone } = req.body;
@@ -98,6 +103,12 @@ usersRouter.post("/register", async (req, res, next) => {
       REACT_APP_JWT_SECRET
     );
 
+    // Set the token as a cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
+
     res.status(201).send({
       message: "Thank you for registering",
       token,
@@ -109,40 +120,51 @@ usersRouter.post("/register", async (req, res, next) => {
   }
 });
 
+
 // POST /api/users/login
+
+
 
 usersRouter.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
-  console.log("You've reached /login");
 
   if (!email || !password) {
-    res.status(400).send("Please provide both an email and password to log in");
+    return res
+      .status(400)
+      .send("Please provide both an email and password to log in");
   }
 
   try {
     const user = await getUser({ email, password });
-    console.log("user.user_id from /login: ", user.user_id);
 
     if (user) {
       const expirationTime =
         Math.floor(Date.now() / 1000) + parseInt(JWT_EXPIRATION_TIME);
-
       const token = jwt.sign(
         { id: user.user_id, email, exp: expirationTime },
         REACT_APP_JWT_SECRET
       );
 
-      res.status(200).send({ message: "You are logged in!", token, user });
+      // Set the token as a cookie
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+      });
+
+      // Send a success response with the user data
+      return res.status(200).json({ message: "You are logged in!", user });
     } else {
-      next({
+      // Send an error response if login fails
+      return res.status(401).json({
         message: "The email or password you have entered is incorrect",
         name: "IncorrectCredentialsError",
         error: "Email or password is incorrect",
       });
     }
-  } catch ({ name, message }) {
-    console.error({ name, message });
-    next({ name, message });
+  } catch (error) {
+    // Handle other errors
+    console.error({ name: error.name, message: error.message });
+    next({ name: error.name, message: error.message });
   }
 });
 
@@ -176,7 +198,7 @@ usersRouter.get("/", async (req, res, next) => {
 
 // GET /api/users/:userId
 
-usersRouter.get("/:userId", async (req, res, next) => {
+usersRouter.get("/user/:userId", async (req, res, next) => {
   const { userId } = req.params;
 
   try {
@@ -210,7 +232,7 @@ usersRouter.get("/useremail/:email", async (req, res, next) => {
 
 // DELETE /api/users/:userId/delete
 
-usersRouter.delete("/delete/:userId", requireAdmin, async (req, res, next) => {
+usersRouter.delete("/:userId/delete", requireAdmin, async (req, res, next) => {
   const { userId } = req.params;
   console.log("you have reached the delete user api endpoint")
   try {
@@ -228,5 +250,25 @@ usersRouter.delete("/delete/:userId", requireAdmin, async (req, res, next) => {
     next({ name, message });
   }
 });
+
+// POST /api/users/logout
+
+
+usersRouter.get("/logout", (req, res) => {
+  console.log("You have reached the logout api endpoint")
+  // Clear the "token" cookie
+  // res.clearCookie("token");
+
+  // Optionally, you can send a response indicating successful logout
+  // res.status(200).json({ message: "Logout successful" });
+
+  try {
+    res.clearCookie("token");
+    res.status(200).json({ message: "Logout successfule" });
+  } catch ({ name, message }) {
+    next({ name, message })
+  }
+});
+
 
 module.exports = usersRouter;
