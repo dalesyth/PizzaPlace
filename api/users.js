@@ -149,7 +149,11 @@ usersRouter.post("/login", async (req, res, next) => {
       res.cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
+        domain: "localhost",
+        path: "/",
       });
+
+      console.log("token from api endpoint: ", token)
 
       // Send a success response with the user data
       return res.status(200).json({ message: "You are logged in!", user });
@@ -232,7 +236,7 @@ usersRouter.get("/useremail/:email", async (req, res, next) => {
 
 // DELETE /api/users/:userId/delete
 
-usersRouter.delete("/:userId/delete", requireAdmin, async (req, res, next) => {
+usersRouter.delete("/:userId/delete", async (req, res, next) => {
   const { userId } = req.params;
   console.log("you have reached the delete user api endpoint")
   try {
