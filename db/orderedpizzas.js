@@ -116,9 +116,9 @@ async function getOrderedPizzasByOrderId(order_id) {
       `
         SELECT
           ordered_pizza.ordered_pizza_id AS ordered_pizza_id,
-          ordered_pizza.pizza_price AS ordered_pizza_price,
-          crust_options.title AS ordered_pizza_crust,
-          sauce_options.title AS ordered_pizza_sauce
+          ordered_pizza.pizza_price AS price,
+          crust_options.title AS "crustName",
+          sauce_options.title AS "sauceName"
         FROM
           ordered_pizza
         JOIN
@@ -141,7 +141,7 @@ async function getOrderedPizzasByOrderId(order_id) {
         const toppings = await getToppingsByOrderedPizza(
           pizza.ordered_pizza_id
         );
-        return { ...pizza, ordered_pizza_toppings: toppings };
+        return { ...pizza, toppings: toppings };
       })
     );
 
