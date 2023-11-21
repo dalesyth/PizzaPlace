@@ -119,7 +119,9 @@ async function getOrderedPizzasByOrderId(order_id) {
           ordered_pizza.title AS title,
           ordered_pizza.pizza_price AS price,
           crust_options.title AS "crustName",
-          sauce_options.title AS "sauceName"
+          crust_options.crust_id AS "crustId",
+          sauce_options.title AS "sauceName",
+          sauce_options.sauce_id AS "sauceId"
         FROM
           ordered_pizza
         JOIN
@@ -152,7 +154,6 @@ async function getOrderedPizzasByOrderId(order_id) {
     throw error;
   }
 }
-
 
 async function deleteOrderedPizza(ordered_pizza_id) {
   try {
