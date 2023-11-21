@@ -104,6 +104,7 @@ async function createTables() {
             CREATE TABLE ordered_pizza (
                 ordered_pizza_id SERIAL PRIMARY KEY,
                 order_id INTEGER REFERENCES orders(order_id),
+                title varchar(255),
                 pizza_price NUMERIC,
                 quantity INTEGER,
                 size varchar(255),

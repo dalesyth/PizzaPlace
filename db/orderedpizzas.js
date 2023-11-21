@@ -116,6 +116,7 @@ async function getOrderedPizzasByOrderId(order_id) {
       `
         SELECT
           ordered_pizza.ordered_pizza_id AS ordered_pizza_id,
+          ordered_pizza.title AS title,
           ordered_pizza.pizza_price AS price,
           crust_options.title AS "crustName",
           sauce_options.title AS "sauceName"

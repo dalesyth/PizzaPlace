@@ -70,11 +70,12 @@ orderedPizzaRouter.get("/:orderId/order", async (req, res, next) => {
 // POST /api/ordered-pizza
 
 orderedPizzaRouter.post("/", async (req, res, next) => {
-  const { order_id, pizza_price, quantity, size, crust, sauce } = req.body;
+  const { order_id, title, pizza_price, quantity, size, crust, sauce } = req.body;
 
   try {
     const orderedPizza = await createOrderedPizza({
       order_id,
+      title,
       pizza_price,
       quantity,
       size,
