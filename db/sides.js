@@ -32,7 +32,6 @@ async function updateSide(id, ...fields) {
             RETURNING *;
             `;
   dataArray.push(id);
-  console.log("DATA_ARRAY: ", dataArray);
 
   if (setString.length === 0) {
     return;
@@ -41,7 +40,7 @@ async function updateSide(id, ...fields) {
     const {
       rows: [side],
     } = await client.query(sql, dataArray);
-    console.log("db side: ", side);
+
     return side;
   } catch (error) {
     console.error("Error updating side options: ", error);
@@ -102,7 +101,7 @@ async function getSideByTitle(title) {
 }
 
 async function attachSideToOrder({ sideId, orderId, sidePrice }) {
-  console.log("sidePrice from attachSideToOrder:", sidePrice)
+  console.log("sidePrice from attachSideToOrder:", sidePrice);
   try {
     const {
       rows: [side],

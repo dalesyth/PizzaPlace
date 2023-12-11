@@ -61,50 +61,6 @@ async function createInitialUsers() {
   }
 }
 
-// async function createInitialOrders() {
-//   console.log("Starting to create Orders...");
-//   try {
-//     const ordersToCreate = [
-//       {
-//         user_id: 1,
-//         order_date: "2023-07-12",
-//         order_total: 18.75,
-//         order_complete: true,
-//       },
-//       {
-//         user_id: 1,
-//         order_date: "2023-08-17",
-//         order_total: 22.35,
-//         order_complete: true,
-//       },
-//       {
-//         user_id: 2,
-//         order_date: "2023-09-04",
-//         order_total: 15.65,
-//         order_complete: true,
-//       },
-//       {
-//         user_id: 3,
-//         order_date: "2023-10-01",
-//         order_total: 16.92,
-//         order_complete: false,
-//       },
-//       {
-//         user_id: 4,
-//         order_date: "2023-10-01",
-//         order_total: 13.53,
-//         order_complete: false,
-//       },
-//     ];
-//     await Promise.all(ordersToCreate.map(createOrder));
-
-//     console.log("Finished creating initial orders!");
-//   } catch (error) {
-//     console.error("Error creating initial orders: ", error);
-//     throw error;
-//   }
-// }
-
 async function createInitialToppings() {
   console.log("Starting to create toppings...");
   try {

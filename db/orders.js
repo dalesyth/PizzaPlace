@@ -165,8 +165,6 @@ async function attachPizzaToOrder({
 }
 
 async function deleteOrder(orderId) {
-  console.log("You have reached deleteOrder db method");
-  console.log("orderId from deleteOrder:", orderId);
   try {
     await client.query(
       `
@@ -205,7 +203,7 @@ async function deleteOrder(orderId) {
             `,
       [orderId]
     );
-    console.log(`deletedOrder from deleteOrder: ${deletedOrder}`);
+
     return deletedOrder;
   } catch (error) {
     console.error("Error deleting order: ", error);

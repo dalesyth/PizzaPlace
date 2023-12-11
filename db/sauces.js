@@ -35,7 +35,6 @@ async function updateSauce(id, ...fields) {
             RETURNING *;
             `;
   dataArray.push(id);
-  console.log("DATA_ARRAY: ", dataArray);
 
   if (setString.length === 0) {
     return;
@@ -44,7 +43,7 @@ async function updateSauce(id, ...fields) {
     const {
       rows: [sauce],
     } = await client.query(sql, dataArray);
-    console.log("db sauce: ", sauce);
+
     return sauce;
   } catch (error) {
     console.error("Error updating sauce: ", error);
@@ -107,8 +106,6 @@ async function getSauceByTitle(title) {
 }
 
 async function addSauceToOrderedPizza({ sauceId, orderedPizzaId }) {
-    console.log(`sauceId from db method: ${sauceId}`)
-    console.log(`pizzaId from db method: ${orderedPizzaId}`)
   try {
     const {
       rows: [sauce],

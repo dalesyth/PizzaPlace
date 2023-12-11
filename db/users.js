@@ -84,12 +84,7 @@ async function createAdmin({
 }
 
 async function getUser({ email, password }) {
-  console.log("You've reached thet getUser function in db");
-  console.log(
-    `email from getUser: ${email}, password from getUser: ${password}`
-  );
   try {
-    // const user = await getUserByEmail(email);
     const {
       rows: [user],
     } = await client.query(
@@ -102,14 +97,10 @@ async function getUser({ email, password }) {
       [email]
     );
 
-    console.log("User from getUser: ", user);
-
     if (!user) {
       console.log("User not found");
       return null;
     }
-
-    console.log("user.password from getUser: ", user.password);
 
     const hashedPassword = user.password;
     const isValid = await bcrypt.compare(password, hashedPassword);
@@ -161,7 +152,7 @@ async function getUserByEmail(email) {
     }
 
     delete user.password;
-    console.log(`user from getUserByEmail: ${user}`);
+
     return user;
   } catch (error) {
     console.error("Error getting user by email: ", error);
@@ -170,8 +161,6 @@ async function getUserByEmail(email) {
 }
 
 async function getUserByUserId(userId) {
-  console.log("You have reached getUserByUserId");
-  console.log(`userId from getUserByUserId: ${userId}`);
   try {
     const {
       rows: [user],

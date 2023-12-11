@@ -60,7 +60,6 @@ ordersRouter.get("/:orderId/order", async (req, res, next) => {
     } else {
       res.status(200).send(order);
     }
-   
   } catch ({ name, message }) {
     next({ name, message });
   }
@@ -86,9 +85,7 @@ ordersRouter.get("/:userId/user", async (req, res, next) => {
 // POST /api/orders/
 
 ordersRouter.post("/", async (req, res, next) => {
-  
   const { user_id, order_date, order_total } = req.body;
-  console.log("user_id from createNewOrder: ", user_id)
 
   try {
     const order = await createOrder({ user_id, order_date, order_total });

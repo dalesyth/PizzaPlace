@@ -32,7 +32,7 @@ async function updateCrust(id, ...fields) {
             RETURNING *;
             `;
   dataArray.push(id);
-  console.log("DATA_ARRAY: ", dataArray);
+  
 
   if (setString.length === 0) {
     return;
@@ -41,7 +41,7 @@ async function updateCrust(id, ...fields) {
     const {
       rows: [crust],
     } = await client.query(sql, dataArray);
-    console.log("db crust: ", crust);
+    
     return crust;
   } catch (error) {
     console.error("Error updating crust: ", error);

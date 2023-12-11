@@ -59,9 +59,7 @@ async function updateOrderedPizza(id, ...fields) {
 }
 
 async function getOrderedPizzaByPizzaId(ordered_pizza_id) {
-  console.log(
-    `ordered_pizza_id from getOrderedPizzaByPizzaId: ${ordered_pizza_id}`
-  );
+  
   try {
     const {
       rows: [orderedPizza],
@@ -77,7 +75,7 @@ async function getOrderedPizzaByPizzaId(ordered_pizza_id) {
             `,
       [ordered_pizza_id]
     );
-    console.log(`orderedPizza: ${orderedPizza}`);
+    
     return orderedPizza;
   } catch (error) {
     console.error("Error getting ordered pizza by pizza id: ", error);
@@ -110,7 +108,7 @@ async function getOrderedPizzasByUser(user_id) {
 }
 
 async function getOrderedPizzasByOrderId(order_id) {
-  console.log("order_id from getOrderedPizzasByOrderId db method:", order_id);
+  
   try {
     const { rows: pizzas } = await client.query(
       `

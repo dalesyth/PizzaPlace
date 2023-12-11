@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { REACT_APP_JWT_SECRET, JWT_EXPIRATION_TIME } = process.env;
 const usersRouter = express.Router();
-const cookieParser = require('cookie-parser')
+const cookieParser = require("cookie-parser");
 
 const {
   getUserByEmail,
@@ -28,9 +28,7 @@ usersRouter.use(cookieParser());
 
 usersRouter.post("/guest", async (req, res, next) => {
   const { first_name, last_name, email } = req.body;
-  console.log("first_name from guest API endpoint:", first_name)
-  console.log("last_name from guest API endpoint:", last_name);
-  console.log("email from guest API endpoint:", email);
+
   try {
     if (!first_name) {
       res.status(400).send("Please enter a first name");
@@ -50,7 +48,7 @@ usersRouter.post("/guest", async (req, res, next) => {
       email,
     });
 
-    console.log("user from guest api endpoint:", user)
+    console.log("user from guest api endpoint:", user);
 
     res.status(201).send(user);
   } catch ({ name, message }) {
@@ -59,8 +57,6 @@ usersRouter.post("/guest", async (req, res, next) => {
 });
 
 // POST /api/users/register
-
-
 
 usersRouter.post("/register", async (req, res, next) => {
   const { first_name, last_name, email, password, phone } = req.body;
@@ -120,10 +116,7 @@ usersRouter.post("/register", async (req, res, next) => {
   }
 });
 
-
 // POST /api/users/login
-
-
 
 usersRouter.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
@@ -153,7 +146,7 @@ usersRouter.post("/login", async (req, res, next) => {
         path: "/",
       });
 
-      console.log("token from api endpoint: ", token)
+      console.log("token from api endpoint: ", token);
 
       // Send a success response with the user data
       return res.status(200).json({ message: "You are logged in!", user });
@@ -176,8 +169,6 @@ usersRouter.post("/login", async (req, res, next) => {
 
 usersRouter.get("/me", requireUser, async (req, res, next) => {
   const user = req.user;
-  console.log(`req.body from /me: ${Object.values(req.body)}`);
-  console.log(`user from /me: ${user}`);
 
   try {
     res.send(user);
@@ -192,7 +183,7 @@ usersRouter.get("/me", requireUser, async (req, res, next) => {
 usersRouter.get("/", async (req, res, next) => {
   try {
     const allUsers = await getAllUsers();
-    console.log("allUsers from api endpoint:", allUsers)
+
     res.status(200).send(allUsers);
   } catch ({ name, message }) {
     console.error({ name, message });
@@ -238,11 +229,9 @@ usersRouter.get("/useremail/:email", async (req, res, next) => {
 
 usersRouter.delete("/:userId/delete", async (req, res, next) => {
   const { userId } = req.params;
-  console.log("you have reached the delete user api endpoint")
+
   try {
     const deletedUser = await deleteUser(userId);
-
-    console.log("deletedUser from delete api enpoint:", deletedUser)
 
     if (deletedUser) {
       res.status(200).send("User has been deleted");
@@ -257,22 +246,16 @@ usersRouter.delete("/:userId/delete", async (req, res, next) => {
 
 // POST /api/users/logout
 
-
 usersRouter.get("/logout", (req, res) => {
-  console.log("You have reached the logout api endpoint")
-  // Clear the "token" cookie
-  // res.clearCookie("token");
-
-  // Optionally, you can send a response indicating successful logout
-  // res.status(200).json({ message: "Logout successful" });
+  console.log("You have reached the logout api endpoint");
+ 
 
   try {
     res.clearCookie("token");
     res.status(200).json({ message: "Logout successfule" });
   } catch ({ name, message }) {
-    next({ name, message })
+    next({ name, message });
   }
 });
-
 
 module.exports = usersRouter;

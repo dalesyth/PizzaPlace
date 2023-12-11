@@ -117,8 +117,7 @@ toppingsRouter.post("/", requireAdmin, async (req, res, next) => {
 toppingsRouter.patch("/:pizzaId/addTopping", async (req, res, next) => {
   const { pizzaId } = req.params;
   const { topping_id } = req.body;
-  console.log("pizza_id from api endpoint:", pizzaId)
-  console.log("topping_id from api endpoing:", topping_id)
+ 
   try {
     const topping = await attachToppingToOrderedPizza({ topping_id, pizza_id: pizzaId });
 

@@ -50,14 +50,11 @@ orderedPizzaRouter.get("/user/:userId", async (req, res, next) => {
 
 orderedPizzaRouter.get("/:orderId/order", async (req, res, next) => {
   const { orderId } = req.params;
-  console.log("orderId from api endpoint:", orderId)
+
   try {
     const orderedPizza = await getOrderedPizzasByOrderId(orderId);
 
-    console.log("orderedPizza from api endpoing:", orderedPizza)
-
     if (!orderedPizza || orderedPizza.length === 0) {
-      
       res.send(null);
     } else {
       res.status(200).send(orderedPizza);
@@ -70,7 +67,8 @@ orderedPizzaRouter.get("/:orderId/order", async (req, res, next) => {
 // POST /api/ordered-pizza
 
 orderedPizzaRouter.post("/", async (req, res, next) => {
-  const { order_id, title, pizza_price, quantity, size, crust, sauce } = req.body;
+  const { order_id, title, pizza_price, quantity, size, crust, sauce } =
+    req.body;
 
   try {
     const orderedPizza = await createOrderedPizza({

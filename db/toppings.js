@@ -32,7 +32,6 @@ async function updateTopping(id, ...fields) {
             RETURNING *;
             `;
   dataArray.push(id);
-  console.log("DATA_ARRAY: ", dataArray);
 
   if (setString.length === 0) {
     return;
@@ -41,7 +40,7 @@ async function updateTopping(id, ...fields) {
     const {
       rows: [topping],
     } = await client.query(sql, dataArray);
-    console.log("db topping: ", topping);
+
     return topping;
   } catch (error) {
     console.error("Error updating topping: ", error);
