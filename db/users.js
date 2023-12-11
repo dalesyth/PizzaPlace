@@ -196,6 +196,22 @@ async function deleteUser(userId) {
   try {
     await client.query(
       `
+        DELETE FROM pizza_toppings
+        WHERE pizza_id IN (
+          SELECT ordered_pizza_id
+          FROM ordered_pizza
+          WHERE order_id IN (
+            SELECT order_id
+            FROM orders
+            WHERE user_id=$1
+          )
+        )
+      `,
+      [userId]
+    );
+
+    await client.query(
+      `
             DELETE FROM ordered_pizza
             WHERE order_id IN (
                 SELECT order_id
@@ -203,6 +219,18 @@ async function deleteUser(userId) {
                 WHERE user_id=$1
             )  
             `,
+      [userId]
+    );
+
+    await client.query(
+      ` 
+            DELETE FROM ordered_sides
+            WHERE order_id IN (
+              SELECT order_id
+              FROM orders
+              WHERE user_id=$1
+            )  
+      `,
       [userId]
     );
 
