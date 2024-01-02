@@ -99,7 +99,7 @@ usersRouter.post("/register", async (req, res, next) => {
       REACT_APP_JWT_SECRET
     );
 
-    // Set the token as a cookie
+   
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -138,7 +138,7 @@ usersRouter.post("/login", async (req, res, next) => {
         REACT_APP_JWT_SECRET
       );
 
-      // Set the token as a cookie
+     
       res.cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -148,10 +148,10 @@ usersRouter.post("/login", async (req, res, next) => {
 
       console.log("token from api endpoint: ", token);
 
-      // Send a success response with the user data
+      
       return res.status(200).json({ message: "You are logged in!", user });
     } else {
-      // Send an error response if login fails
+      
       return res.status(401).json({
         message: "The email or password you have entered is incorrect",
         name: "IncorrectCredentialsError",
@@ -159,7 +159,7 @@ usersRouter.post("/login", async (req, res, next) => {
       });
     }
   } catch (error) {
-    // Handle other errors
+    
     console.error({ name: error.name, message: error.message });
     next({ name: error.name, message: error.message });
   }

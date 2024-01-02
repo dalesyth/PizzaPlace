@@ -2,11 +2,11 @@ const { client } = require("./index");
 
 async function createOrder({ ...fields }) {
   const dataArray = Object.values(fields);
-  //Build fields list
+  
   let columnNames = Object.keys(fields)
     .map((key) => `"${key}"`)
     .join(", ");
-  //Build VALUES place holder.
+  
   let valuePlaceHolders = Object.keys(fields)
     .map((keys, index) => {
       return `$${index + 1}`;

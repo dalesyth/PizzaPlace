@@ -445,7 +445,7 @@ async function createInitialSides() {
 async function populateDB() {
   try {
     await createInitialUsers();
-    // await createInitialOrders();
+   
     await createInitialToppings();
     await createInitialCrusts();
     await createInitialSauces();
