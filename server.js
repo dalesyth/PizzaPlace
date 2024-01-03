@@ -3,7 +3,6 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const SERVER_PORT = process.env.PORT || 3000;
 
 const app = express();
 
@@ -39,6 +38,7 @@ app.options(
   })
 );
 
-app.listen(SERVER_PORT, () => {
-  console.log(`Server is running on port: ${SERVER_PORT}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port: ${PORT}`);
 });
